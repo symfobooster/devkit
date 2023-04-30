@@ -1,15 +1,15 @@
 <?php
-/** @var \Zabachok\Symfobooster\Maker\Endpoint\Maker\FunctionalTestMaker $maker */
-/** @var \Zabachok\Symfobooster\Maker\Endpoint\Manifest\Field[] $fields */
-/** @var \Zabachok\Symfobooster\Maker\Endpoint\Manifest\Input $input */
-/** @var \Zabachok\Symfobooster\Maker\Endpoint\Manifest\Manifest $manifest */
+/** @var \Zabachok\SymfoboosterDevkit\Maker\Endpoint\Maker\FunctionalTestMaker $maker */
+/** @var \Zabachok\SymfoboosterDevkit\Maker\Endpoint\Manifest\Field[] $fields */
+/** @var \Zabachok\SymfoboosterDevkit\Maker\Endpoint\Manifest\Input $input */
+/** @var \Zabachok\SymfoboosterDevkit\Maker\Endpoint\Manifest\Manifest $manifest */
 echo "<?php\n";
 ?>
 
 namespace <?= $namespace; ?>;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Zabachok\Symfobooster\Tester\ClientTrait;
+use Zabachok\SymfoboosterDevkit\Tester\ClientTrait;
 
 class <?= $class_name ?> extends WebTestCase
 {

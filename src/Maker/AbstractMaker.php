@@ -1,13 +1,13 @@
 <?php
 
-namespace Zabachok\Symfobooster\Maker;
+namespace Zabachok\SymfoboosterDevkit\Maker;
 
 use Nette\PhpGenerator\PhpFile;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\Generator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Yaml\Yaml;
-use Zabachok\Symfobooster\Maker\Endpoint\Manifest\Manifest;
+use Zabachok\SymfoboosterDevkit\Maker\Endpoint\Manifest\Manifest;
 
 abstract class AbstractMaker implements MakerInterface
 {

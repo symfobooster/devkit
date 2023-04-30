@@ -1,6 +1,6 @@
 <?php
 
-namespace Zabachok\Symfobooster\Maker\Endpoint\Manifest;
+namespace Zabachok\SymfoboosterDevkit\Maker\Endpoint\Manifest;
 
 class Service
 {

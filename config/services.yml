@@ -1,0 +1,8 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  Zabachok\SymfoboosterDevkit\Maker\EndpointMaker:
+    class: Zabachok\SymfoboosterDevkit\Maker\Endpoint\EndpointMaker
+    tags: ["maker.command"]

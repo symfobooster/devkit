@@ -1,6 +1,6 @@
 <?php
 
-namespace Zabachok\Symfobooster\Tester;
+namespace Zabachok\SymfoboosterDevkit\Tester;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;

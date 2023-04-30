@@ -1,6 +1,6 @@
 <?php
 
-namespace Zabachok\Symfobooster\Maker\Endpoint;
+namespace Zabachok\SymfoboosterDevkit\Maker\Endpoint;
 
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\PhpFile;

@@ -1,8 +1,8 @@
 <?php
 
-namespace Zabachok\Symfobooster\Maker\Endpoint\Manifest;
+namespace Zabachok\SymfoboosterDevkit\Maker\Endpoint\Manifest;
 
-use Zabachok\Symfobooster\Hydrator;
+use Zabachok\SymfoboosterDevkit\Hydrator;
 
 class Input
 {

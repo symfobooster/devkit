@@ -1,8 +1,8 @@
 <?php
 
-namespace Zabachok\Symfobooster\Maker\Endpoint\Maker;
+namespace Zabachok\SymfoboosterDevkit\Maker\Endpoint\Maker;
 
-use Zabachok\Symfobooster\Maker\AbstractMaker;
+use Zabachok\SymfoboosterDevkit\Maker\AbstractMaker;
 
 use function Symfony\Component\String\u;
 

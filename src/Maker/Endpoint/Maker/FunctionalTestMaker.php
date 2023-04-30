@@ -1,9 +1,9 @@
 <?php
 
-namespace Zabachok\Symfobooster\Maker\Endpoint\Maker;
+namespace Zabachok\SymfoboosterDevkit\Maker\Endpoint\Maker;
 
-use Zabachok\Symfobooster\Maker\AbstractMaker;
-use Zabachok\Symfobooster\Maker\Endpoint\Manifest\Field;
+use Zabachok\SymfoboosterDevkit\Maker\AbstractMaker;
+use Zabachok\SymfoboosterDevkit\Maker\Endpoint\Manifest\Field;
 
 class FunctionalTestMaker extends AbstractMaker
 {
