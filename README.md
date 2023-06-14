@@ -1,4 +1,8 @@
 # symfobooster-devkit
+
+[![Lint](https://github.com/symfobooster/devkit/actions/workflows/tests.yml/badge.svg)](https://github.com/symfobooster/devkit/actions/workflows/tests.yml)
+![GitHub](https://img.shields.io/github/license/symfobooster/devkit)
+
 Symfobooster-devkit is an open source repository designed to help developers rapidly generate code for use in the Symfony framework. With this tool, developers can easily generate a wide range of components, including endpoints, services, validators, responses, tests, documentation, and more.
 
 This repository is designed to streamline the development process, allowing developers to generate code quickly and efficiently. Whether you are working on a large-scale project or a smaller application, Symfobooster-devkit can help you speed up your workflow and reduce the amount of time spent on repetitive tasks.
