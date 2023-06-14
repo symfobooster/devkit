@@ -1,6 +1,6 @@
 <?php
 
-namespace Zabachok\SymfoboosterDevkit\Maker;
+namespace Symfobooster\Devkit\Maker;
 
 interface MakerInterface
 {

@@ -1,6 +1,6 @@
 <?php
-/** @var \Zabachok\SymfoboosterDevkit\Maker\Endpoint\Manifest\Field[] $fields */
-/** @var \Zabachok\SymfoboosterDevkit\Maker\Endpoint\Manifest\Input $input */
+/** @var \Symfobooster\Devkit\Maker\Endpoint\Manifest\Field[] $fields */
+/** @var \Symfobooster\Devkit\Maker\Endpoint\Manifest\Input $input */
 echo "<?php\n";
 ?>
 
@@ -8,12 +8,12 @@ namespace <?= $namespace; ?>;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints as Assert;
-use Zabachok\SymfoboosterDevkit\Input\InputInterface;
+use Symfobooster\Devkit\Input\InputInterface;
 <?php if($input->hasMuted): ?>
-use Zabachok\SymfoboosterDevkit\Input\Attributes\Muted;
+use Symfobooster\Devkit\Input\Attributes\Muted;
 <?php endif; ?>
 <?php if($input->hadRenamed): ?>
-use Zabachok\SymfoboosterDevkit\Input\Attributes\Renamed;
+use Symfobooster\Devkit\Input\Attributes\Renamed;
 <?php endif; ?>
 
 class <?= $class_name ?> implements InputInterface

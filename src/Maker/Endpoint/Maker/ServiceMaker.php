@@ -1,16 +1,16 @@
 <?php
 
-namespace Zabachok\SymfoboosterDevkit\Maker\Endpoint\Maker;
+namespace Symfobooster\Devkit\Maker\Endpoint\Maker;
 
 use Nette\PhpGenerator\Method;
-use Zabachok\SymfoboosterDevkit\Input\InputInterface;
-use Zabachok\SymfoboosterDevkit\Maker\AbstractMaker;
-use Zabachok\SymfoboosterDevkit\Maker\Endpoint\ClassMaker;
-use Zabachok\SymfoboosterDevkit\Maker\Endpoint\Manifest\Manifest;
-use Zabachok\SymfoboosterDevkit\Output\NotFound;
-use Zabachok\SymfoboosterDevkit\Output\OutputInterface;
-use Zabachok\SymfoboosterDevkit\Output\Success;
-use Zabachok\SymfoboosterDevkit\Service\ServiceInterface;
+use Symfobooster\Devkit\Input\InputInterface;
+use Symfobooster\Devkit\Maker\AbstractMaker;
+use Symfobooster\Devkit\Maker\Endpoint\ClassMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Manifest\Manifest;
+use Symfobooster\Devkit\Output\NotFound;
+use Symfobooster\Devkit\Output\OutputInterface;
+use Symfobooster\Devkit\Output\Success;
+use Symfobooster\Devkit\Service\ServiceInterface;
 
 class ServiceMaker extends AbstractMaker
 {

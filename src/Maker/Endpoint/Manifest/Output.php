@@ -1,10 +1,10 @@
 <?php
 
-namespace Zabachok\SymfoboosterDevkit\Maker\Endpoint\Manifest;
+namespace Symfobooster\Devkit\Maker\Endpoint\Manifest;
 
-use Zabachok\SymfoboosterDevkit\Hydrator;
-use Zabachok\SymfoboosterDevkit\Output\Created;
-use Zabachok\SymfoboosterDevkit\Output\Success;
+use Symfobooster\Devkit\Hydrator;
+use Symfobooster\Devkit\Output\Created;
+use Symfobooster\Devkit\Output\Success;
 
 class Output
 {

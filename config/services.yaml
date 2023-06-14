@@ -1,0 +1,8 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  Symfobooster\Devkit\Maker\EndpointMaker:
+    class: Symfobooster\Devkit\Maker\Endpoint\EndpointMaker
+    tags: ["maker.command"]

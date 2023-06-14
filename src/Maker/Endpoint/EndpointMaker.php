@@ -1,6 +1,6 @@
 <?php
 
-namespace Zabachok\SymfoboosterDevkit\Maker\Endpoint;
+namespace Symfobooster\Devkit\Maker\Endpoint;
 
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\DependencyBuilder;
@@ -12,15 +12,15 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Yaml\Yaml;
-use Zabachok\SymfoboosterDevkit\Hydrator;
-use Zabachok\SymfoboosterDevkit\Maker\Endpoint\Maker\FunctionalTestMaker;
-use Zabachok\SymfoboosterDevkit\Maker\Endpoint\Maker\InputMaker;
-use Zabachok\SymfoboosterDevkit\Maker\Endpoint\Maker\OutputMaker;
-use Zabachok\SymfoboosterDevkit\Maker\Endpoint\Maker\RouterMaker;
-use Zabachok\SymfoboosterDevkit\Maker\Endpoint\Maker\EndpointConfigMaker;
-use Zabachok\SymfoboosterDevkit\Maker\Endpoint\Maker\ServiceMaker;
-use Zabachok\SymfoboosterDevkit\Maker\Endpoint\Manifest\Manifest;
-use Zabachok\SymfoboosterDevkit\Maker\Storage;
+use Symfobooster\Devkit\Hydrator;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTestMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\InputMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\OutputMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\RouterMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\EndpointConfigMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\ServiceMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Manifest\Manifest;
+use Symfobooster\Devkit\Maker\Storage;
 
 class EndpointMaker extends AbstractMaker
 {

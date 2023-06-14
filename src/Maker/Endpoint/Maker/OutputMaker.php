@@ -1,12 +1,12 @@
 <?php
 
-namespace Zabachok\SymfoboosterDevkit\Maker\Endpoint\Maker;
+namespace Symfobooster\Devkit\Maker\Endpoint\Maker;
 
 use Nette\PhpGenerator\PhpFile;
-use Zabachok\SymfoboosterDevkit\Maker\AbstractMaker;
-use Zabachok\SymfoboosterDevkit\Maker\Endpoint\ClassMaker;
-use Zabachok\SymfoboosterDevkit\Maker\Endpoint\Manifest\Field;
-use Zabachok\SymfoboosterDevkit\Output\OutputInterface;
+use Symfobooster\Devkit\Maker\AbstractMaker;
+use Symfobooster\Devkit\Maker\Endpoint\ClassMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Manifest\Field;
+use Symfobooster\Devkit\Output\OutputInterface;
 
 class OutputMaker extends AbstractMaker
 {

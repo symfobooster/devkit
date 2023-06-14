@@ -1,13 +1,13 @@
 <?php
 
-namespace Zabachok\SymfoboosterDevkit\Maker;
+namespace Symfobooster\Devkit\Maker;
 
 use Nette\PhpGenerator\PhpFile;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\Generator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Yaml\Yaml;
-use Zabachok\SymfoboosterDevkit\Maker\Endpoint\Manifest\Manifest;
+use Symfobooster\Devkit\Maker\Endpoint\Manifest\Manifest;
 
 abstract class AbstractMaker implements MakerInterface
 {
@@ -84,5 +84,4 @@ abstract class AbstractMaker implements MakerInterface
         $className = end($pieces);
         return str_replace('Interface', '', $className);
     }
-
 }

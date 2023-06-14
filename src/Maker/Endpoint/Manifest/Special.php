@@ -1,6 +1,6 @@
 <?php
 
-namespace Zabachok\SymfoboosterDevkit\Maker\Endpoint\Manifest;
+namespace Symfobooster\Devkit\Maker\Endpoint\Manifest;
 
 class Special
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Zabachok\SymfoboosterDevkit\Maker\Endpoint\Maker;
+namespace Symfobooster\Devkit\Maker\Endpoint\Maker;
 
-use Zabachok\SymfoboosterDevkit\Maker\AbstractMaker;
+use Symfobooster\Devkit\Maker\AbstractMaker;
 
 class RouterMaker extends AbstractMaker
 {
