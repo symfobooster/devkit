@@ -37,6 +37,28 @@ trait ClientTrait
         return $this->send('GET', $url . $query, []);
     }
 
+    private function send(string $method, string $url, array $data): ?array
+    {
+        $client = $this->getWebClient();
+        foreach ($this->cookies as $key => $value) {
+            $client->getCookieJar()->set(new Cookie($key, $value, (string)strtotime('+1 day')));
+        }
+        $client->request(
+            $method,
+            $url,
+            [],
+            [],
+            array_merge(['CONTENT_TYPE' => 'application/json'], $this->headers),
+            json_encode($data)
+        );
+        $response = $this->client->getResponse();
+        $this->response = json_decode($response->getContent(), true);
+        $this->cookies = [];
+        $this->headers = [];
+
+        return $this->response;
+    }
+
     protected function getWebClient(): KernelBrowser
     {
         if (!isset($this->client)) {
@@ -83,27 +105,5 @@ trait ClientTrait
     protected function checkNotFound(): void
     {
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
-    }
-
-    private function send(string $method, string $url, array $data): ?array
-    {
-        $client = $this->getWebClient();
-        foreach ($this->cookies as $key => $value) {
-            $client->getCookieJar()->set(new Cookie($key, $value, (string)strtotime('+1 day')));
-        }
-        $client->request(
-            $method,
-            $url,
-            [],
-            [],
-            array_merge(['CONTENT_TYPE' => 'application/json'], $this->headers),
-            json_encode($data)
-        );
-        $response = $this->client->getResponse();
-        $this->response = json_decode($response->getContent(), true);
-        $this->cookies = [];
-        $this->headers = [];
-
-        return $this->response;
     }
 }

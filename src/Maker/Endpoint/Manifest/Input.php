@@ -16,7 +16,7 @@ class Input
         $hydrator = new Hydrator();
         foreach ($fields as $key => $manifest) {
             /** @var Field $field */
-            $field = $hydrator->hydrate(Field::class, $manifest  ?? ['name' => $key]);
+            $field = $hydrator->hydrate(Field::class, $manifest ?? ['name' => $key]);
             $field->name = $key;
             if ($field->muted) {
                 $this->hasMuted = true;

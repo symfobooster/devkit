@@ -1,8 +1,14 @@
 <?php
-/** @var \Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTestMaker $maker */
-/** @var \Symfobooster\Devkit\Maker\Endpoint\Manifest\Field[] $fields */
-/** @var \Symfobooster\Devkit\Maker\Endpoint\Manifest\Input $input */
-/** @var \Symfobooster\Devkit\Maker\Endpoint\Manifest\Manifest $manifest */
+/** @var FunctionalTestMaker $maker */
+/** @var Field[] $fields */
+/** @var Input $input */
+/** @var Manifest $manifest */
+
+use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTestMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Manifest\Field;
+use Symfobooster\Devkit\Maker\Endpoint\Manifest\Input;
+use Symfobooster\Devkit\Maker\Endpoint\Manifest\Manifest;
+
 echo "<?php\n";
 ?>
 
@@ -13,54 +19,54 @@ use Symfobooster\Devkit\Tester\ClientTrait;
 
 class <?= $class_name ?> extends WebTestCase
 {
-    use ClientTrait;
+use ClientTrait;
 
-    public function testSuccess(): void
-    {
-        $response = $this->send<?= ucfirst($manifest->method) ?>('/<?= $manifest->domain ?>/<?= $manifest->endpoint ?>', $this->getData());
-        $this->checkSuccess();
-    }
+public function testSuccess(): void
+{
+$response = $this->send<?= ucfirst($manifest->method) ?>('/<?= $manifest->domain ?>/<?= $manifest->endpoint ?>', $this->getData());
+$this->checkSuccess();
+}
 
-    /**
-     * @dataProvider getNotValidData
-     */
-    public function testNotValid(string $field, $value): void
-    {
-        $data = $this->getData();
-        $data[$field] = $value;
+/**
+* @dataProvider getNotValidData
+*/
+public function testNotValid(string $field, $value): void
+{
+$data = $this->getData();
+$data[$field] = $value;
 
-        $response = $this->send<?= ucfirst($manifest->method) ?>('/<?= $manifest->domain ?>/<?= $manifest->endpoint ?>', $data);
-        $this->checkNotValid([$field]);
-    }
+$response = $this->send<?= ucfirst($manifest->method) ?>('/<?= $manifest->domain ?>/<?= $manifest->endpoint ?>', $data);
+$this->checkNotValid([$field]);
+}
 
 
-    /**
-     * @dataProvider getNotValidData
-     */
-    public function testRequired(string $field, $value): void
-    {
-        $data = $this->getData();
-        unset($data[$field]);
+/**
+* @dataProvider getNotValidData
+*/
+public function testRequired(string $field, $value): void
+{
+$data = $this->getData();
+unset($data[$field]);
 
-        $response = $this->send<?= ucfirst($manifest->method) ?>('/<?= $manifest->domain ?>/<?= $manifest->endpoint ?>', $data);
-        $this->checkNotValid([$field]);
-    }
+$response = $this->send<?= ucfirst($manifest->method) ?>('/<?= $manifest->domain ?>/<?= $manifest->endpoint ?>', $data);
+$this->checkNotValid([$field]);
+}
 
-    public function getData(): array
-    {
-        return [
+public function getData(): array
+{
+return [
 <?php foreach ($fields as $field): ?>
-            '<?= $field->name ?>' => <?= $maker->getDataExample($field) ?>,
+    '<?= $field->name ?>' => <?= $maker->getDataExample($field) ?>,
 <?php endforeach; ?>
-        ];
-    }
+];
+}
 
-    public function getNotValidData(): array
-    {
-        return [
+public function getNotValidData(): array
+{
+return [
 <?php foreach ($fields as $field): ?>
-            ['<?= $field->name ?>', 'InvalidValue'],
+    ['<?= $field->name ?>', 'InvalidValue'],
 <?php endforeach; ?>
-        ];
-    }
+];
+}
 }

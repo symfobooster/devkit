@@ -2,6 +2,15 @@
 
 namespace Symfobooster\Devkit\Maker\Endpoint;
 
+use Symfobooster\Devkit\Hydrator;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\EndpointConfigMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTestMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\InputMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\OutputMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\RouterMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\ServiceMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Manifest\Manifest;
+use Symfobooster\Devkit\Maker\Storage;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\DependencyBuilder;
 use Symfony\Bundle\MakerBundle\Exception\RuntimeCommandException;
@@ -12,15 +21,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Yaml\Yaml;
-use Symfobooster\Devkit\Hydrator;
-use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTestMaker;
-use Symfobooster\Devkit\Maker\Endpoint\Maker\InputMaker;
-use Symfobooster\Devkit\Maker\Endpoint\Maker\OutputMaker;
-use Symfobooster\Devkit\Maker\Endpoint\Maker\RouterMaker;
-use Symfobooster\Devkit\Maker\Endpoint\Maker\EndpointConfigMaker;
-use Symfobooster\Devkit\Maker\Endpoint\Maker\ServiceMaker;
-use Symfobooster\Devkit\Maker\Endpoint\Manifest\Manifest;
-use Symfobooster\Devkit\Maker\Storage;
 
 class EndpointMaker extends AbstractMaker
 {

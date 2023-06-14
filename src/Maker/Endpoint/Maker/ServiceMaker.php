@@ -48,29 +48,6 @@ class ServiceMaker extends AbstractMaker
         $this->writeClassFile($generator->getPath(), $generator->getContent());
     }
 
-    private function addBehave(ClassMaker $generator): Method
-    {
-        $method = $generator->getClass()->addMethod('behave');
-        $method
-            ->setReturnType(OutputInterface::class);
-        $method->addParameter('input')->setType(InputInterface::class);
-
-        return $method;
-    }
-
-    private function addRepository(ClassMaker $generator): void
-    {
-        if (empty($this->manifest->service->repository)) {
-            return;
-        }
-        $generator->getNamespace()->addUse($this->manifest->service->repository);
-
-        $method = $generator->getClass()->addMethod('__construct');
-        $method->addPromotedParameter($this->getVariableByClass($this->manifest->service->repository))
-            ->setType($this->manifest->service->repository)
-            ->setPrivate();
-    }
-
     private function makeListService(ClassMaker $generator): void
     {
     }
@@ -82,18 +59,6 @@ class ServiceMaker extends AbstractMaker
         $repositoryVar = $this->getVariableByClass($this->manifest->service->repository);
 
 
-    }
-
-    private function makeDeleteService(ClassMaker $generator): void
-    {
-        $behave = $this->addFindById($generator);
-        $entityVar = $this->getVariableByClass($this->manifest->service->entity);
-        $repositoryVar = $this->getVariableByClass($this->manifest->service->repository);
-        $generator->getNamespace()->addUse(Success::class);
-
-        $behave->addBody('$this->' . $repositoryVar . '->delete($' . $entityVar . ');');
-        $behave->addBody('');
-        $behave->addBody('return new Success();');
     }
 
     private function addFindById(ClassMaker $generator): Method
@@ -120,6 +85,29 @@ EOT;
         return $behave;
     }
 
+    private function addRepository(ClassMaker $generator): void
+    {
+        if (empty($this->manifest->service->repository)) {
+            return;
+        }
+        $generator->getNamespace()->addUse($this->manifest->service->repository);
+
+        $method = $generator->getClass()->addMethod('__construct');
+        $method->addPromotedParameter($this->getVariableByClass($this->manifest->service->repository))
+            ->setType($this->manifest->service->repository)
+            ->setPrivate();
+    }
+
+    private function addBehave(ClassMaker $generator): Method
+    {
+        $method = $generator->getClass()->addMethod('behave');
+        $method
+            ->setReturnType(OutputInterface::class);
+        $method->addParameter('input')->setType(InputInterface::class);
+
+        return $method;
+    }
+
     private function makeUpdateService(ClassMaker $generator)
     {
         $behave = $this->addFindById($generator);
@@ -130,6 +118,18 @@ EOT;
 
         $behave->addBody("\n\n");
         $behave->addBody('$this->' . $repositoryVar . '->persist($' . $entityVar . ');');
+        $behave->addBody('');
+        $behave->addBody('return new Success();');
+    }
+
+    private function makeDeleteService(ClassMaker $generator): void
+    {
+        $behave = $this->addFindById($generator);
+        $entityVar = $this->getVariableByClass($this->manifest->service->entity);
+        $repositoryVar = $this->getVariableByClass($this->manifest->service->repository);
+        $generator->getNamespace()->addUse(Success::class);
+
+        $behave->addBody('$this->' . $repositoryVar . '->delete($' . $entityVar . ');');
         $behave->addBody('');
         $behave->addBody('return new Success();');
     }

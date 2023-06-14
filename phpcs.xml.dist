@@ -2,7 +2,7 @@
 <ruleset name="PHP_CodeSniffer">
     <description>The coding standard for the project.</description>
 
-    <file>./src/</file>
+    <file>./src</file>
 
     <rule ref="PSR12"/>
 </ruleset>

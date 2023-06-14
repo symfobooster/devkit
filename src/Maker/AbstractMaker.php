@@ -3,11 +3,11 @@
 namespace Symfobooster\Devkit\Maker;
 
 use Nette\PhpGenerator\PhpFile;
+use Symfobooster\Devkit\Maker\Endpoint\Manifest\Manifest;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\Generator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Yaml\Yaml;
-use Symfobooster\Devkit\Maker\Endpoint\Manifest\Manifest;
 
 abstract class AbstractMaker implements MakerInterface
 {
@@ -19,16 +19,22 @@ abstract class AbstractMaker implements MakerInterface
 
     public function __construct(
         InputInterface $input,
-        ConsoleStyle $io,
-        Generator $generator,
-        Manifest $manifest,
-        Storage $storage
-    ) {
+        ConsoleStyle   $io,
+        Generator      $generator,
+        Manifest       $manifest,
+        Storage        $storage
+    )
+    {
         $this->input = $input;
         $this->io = $io;
         $this->generator = $generator;
         $this->manifest = $manifest;
         $this->storage = $storage;
+    }
+
+    protected function readConfigFile(string $path): ?array
+    {
+        return $this->readYamlFile($this->generator->getRootDirectory() . '/config' . $path);
     }
 
     protected function readYamlFile(string $path): ?array
@@ -41,6 +47,11 @@ abstract class AbstractMaker implements MakerInterface
         return null;
     }
 
+    protected function writeConfigFile(string $path, array $config): void
+    {
+        $this->writeYamlFile($this->generator->getRootDirectory() . '/config' . $path, $config);
+    }
+
     protected function writeYamlFile(string $path, array $data): void
     {
         $directory = dirname($path);
@@ -49,16 +60,6 @@ abstract class AbstractMaker implements MakerInterface
         }
 
         file_put_contents($path, Yaml::dump($data, 20, 2, Yaml::DUMP_OBJECT));
-    }
-
-    protected function readConfigFile(string $path): ?array
-    {
-        return $this->readYamlFile($this->generator->getRootDirectory() . '/config' . $path);
-    }
-
-    protected function writeConfigFile(string $path, array $config): void
-    {
-        $this->writeYamlFile($this->generator->getRootDirectory() . '/config' . $path, $config);
     }
 
     protected function writeClassFile(string $path, string $content): void

@@ -32,6 +32,13 @@ class ClassMaker
         }
     }
 
+    public function addUse(string $class): self
+    {
+        $this->namespace->addUse($class);
+
+        return $this;
+    }
+
     public function getFile(): PhpFile
     {
         return $this->file;
@@ -58,12 +65,5 @@ class ClassMaker
         $namespace = str_replace('App/', '/', $namespace);
 
         return $namespace . '/' . $this->class->getName() . '.php';
-    }
-
-    public function addUse(string $class): self
-    {
-        $this->namespace->addUse($class);
-
-        return $this;
     }
 }
