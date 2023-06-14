@@ -3,6 +3,7 @@
 namespace Symfobooster\Devkit\Maker\Endpoint\Maker;
 
 use Symfobooster\Devkit\Maker\AbstractMaker;
+
 use function Symfony\Component\String\u;
 
 class EndpointConfigMaker extends AbstractMaker

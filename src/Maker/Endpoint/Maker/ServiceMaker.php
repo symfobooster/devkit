@@ -57,8 +57,6 @@ class ServiceMaker extends AbstractMaker
         $behave = $this->addFindById($generator);
         $entityVar = $this->getVariableByClass($this->manifest->service->entity);
         $repositoryVar = $this->getVariableByClass($this->manifest->service->repository);
-
-
     }
 
     private function addFindById(ClassMaker $generator): Method

@@ -1,7 +1,9 @@
 <?php
 /** @var FunctionalTestMaker $maker */
+
 /** @var Field[] $fields */
 /** @var Input $input */
+
 /** @var Manifest $manifest */
 
 use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTestMaker;
@@ -23,7 +25,9 @@ use ClientTrait;
 
 public function testSuccess(): void
 {
-$response = $this->send<?= ucfirst($manifest->method) ?>('/<?= $manifest->domain ?>/<?= $manifest->endpoint ?>', $this->getData());
+$response = $this->send<?= ucfirst(
+    $manifest->method
+) ?>('/<?= $manifest->domain ?>/<?= $manifest->endpoint ?>', $this->getData());
 $this->checkSuccess();
 }
 
@@ -55,18 +59,22 @@ $this->checkNotValid([$field]);
 public function getData(): array
 {
 return [
-<?php foreach ($fields as $field): ?>
+<?php
+foreach ($fields as $field): ?>
     '<?= $field->name ?>' => <?= $maker->getDataExample($field) ?>,
-<?php endforeach; ?>
+<?php
+endforeach; ?>
 ];
 }
 
 public function getNotValidData(): array
 {
 return [
-<?php foreach ($fields as $field): ?>
+<?php
+foreach ($fields as $field): ?>
     ['<?= $field->name ?>', 'InvalidValue'],
-<?php endforeach; ?>
+<?php
+endforeach; ?>
 ];
 }
 }

@@ -19,12 +19,11 @@ abstract class AbstractMaker implements MakerInterface
 
     public function __construct(
         InputInterface $input,
-        ConsoleStyle   $io,
-        Generator      $generator,
-        Manifest       $manifest,
-        Storage        $storage
-    )
-    {
+        ConsoleStyle $io,
+        Generator $generator,
+        Manifest $manifest,
+        Storage $storage
+    ) {
         $this->input = $input;
         $this->io = $io;
         $this->generator = $generator;
