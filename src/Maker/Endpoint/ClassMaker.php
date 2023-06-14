@@ -17,7 +17,7 @@ class ClassMaker
         $namespace = substr($classId, 0, strrpos($classId, '\\'));
         $className = substr($classId, (strrpos($classId, '\\') + 1));
 
-        $this->file = new PhpFile;
+        $this->file = new PhpFile();
         $this->file->setStrictTypes();
 
         $this->namespace = $this->file->addNamespace(

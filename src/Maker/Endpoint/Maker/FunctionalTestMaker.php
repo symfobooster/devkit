@@ -7,7 +7,6 @@ use Symfobooster\Devkit\Maker\Endpoint\Manifest\Field;
 
 class FunctionalTestMaker extends AbstractMaker
 {
-
     public function make(): void
     {
         $serviceDetails = $this->generator->createClassNameDetails(

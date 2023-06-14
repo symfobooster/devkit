@@ -2,7 +2,8 @@
 <ruleset name="PHP_CodeSniffer">
     <description>The coding standard for the project.</description>
 
-    <file>./src</file>
+    <file>./src/</file>
+    <exclude-pattern>*\.tpl\.php$</exclude-pattern>
 
     <rule ref="PSR12"/>
 </ruleset>

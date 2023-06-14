@@ -14,7 +14,6 @@ use Symfobooster\Devkit\Service\ServiceInterface;
 
 class ServiceMaker extends AbstractMaker
 {
-
     public function make(): void
     {
         $generator = new ClassMaker(

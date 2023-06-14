@@ -48,20 +48,20 @@ foreach ($fields as $key => $field): ?>
 <?php
 endforeach; ?>
 
-public function getValidators(): Constraint
-{
-return
-new Assert\Collection(
-[
-<?php
-foreach ($fields as $field): ?>
-    '<?= $field->name ?>' => [
-    new Assert\Required(),
-    new Assert\Type('<?= $field->type ?>'),
-    ],
-<?php
-endforeach; ?>
-]
-);
-}
+    public function getValidators(): Constraint
+    {
+        return
+            new Assert\Collection(
+            [
+            <?php
+            foreach ($fields as $field): ?>
+                '<?= $field->name ?>' => [
+                new Assert\Required(),
+                new Assert\Type('<?= $field->type ?>'),
+                ],
+            <?php
+            endforeach; ?>
+            ]
+        );
+    }
 }
