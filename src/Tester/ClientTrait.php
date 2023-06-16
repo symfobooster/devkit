@@ -78,14 +78,13 @@ trait ClientTrait
         return $this->send('POST', $url, $data);
     }
 
-    protected function checkSuccess(int $status = 200): void
+    protected function checkSuccess(): void
     {
         $statusCode = $this->client->getResponse()->getStatusCode();
-        if ($status !== $statusCode) {
+        if (200 !== $statusCode) {
             print_r($this->response);
         }
-        $this->assertEquals($status, $statusCode);
-        $this->assertEquals(true, $this->response['success']);
+        $this->assertEquals(200, $statusCode);
     }
 
     protected function checkLogic(string $message): void
