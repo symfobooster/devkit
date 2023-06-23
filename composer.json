@@ -19,7 +19,7 @@
     "symfony/http-foundation": "6.3.*",
     "nette/php-generator": "^4.0",
     "phpunit/phpunit": "10.2.*",
-    "symfony/browser-kit": "6.1.*"
+    "symfony/browser-kit": "6.3.*"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.7"
