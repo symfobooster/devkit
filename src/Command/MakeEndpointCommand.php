@@ -53,7 +53,7 @@ class MakeEndpointCommand extends Command
             return Command::FAILURE;
         }
         $extractor = new PropertyInfoExtractor([], [new ReflectionExtractor()]);
-        $serializer = new Serializer([new ObjectNormalizer(null,null,null,$extractor)], [new YamlEncoder()]);
+        $serializer = new Serializer([new ObjectNormalizer(null, null, null, $extractor)], [new YamlEncoder()]);
         $manifest = $serializer->deserialize(file_get_contents($manifestFilePath), Manifest::class, 'yml');
         var_dump($manifest);
 
