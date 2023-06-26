@@ -18,22 +18,22 @@ class Output
     /** @var Field[] */
     public array $fields = [];
 
-    public function setFields(array $fields): void
-    {
-        $hydrator = new Hydrator();
-        foreach ($fields as $key => $manifest) {
-            /** @var Field $field */
-            $field = $hydrator->hydrate(Field::class, $manifest ?? ['name' => $key]);
-            $field->name = $key;
-            if ($field->muted) {
-                $this->hasMuted = true;
-            }
-            if ($field->renamed) {
-                $this->hadRenamed = true;
-            }
-            $this->fields[] = $field;
-        }
-    }
+//    public function setFields(array $fields): void
+//    {
+//        $hydrator = new Hydrator();
+//        foreach ($fields as $key => $manifest) {
+//            /** @var Field $field */
+//            $field = $hydrator->hydrate(Field::class, $manifest ?? ['name' => $key]);
+//            $field->name = $key;
+//            if ($field->muted) {
+//                $this->hasMuted = true;
+//            }
+//            if ($field->renamed) {
+//                $this->hadRenamed = true;
+//            }
+//            $this->fields[] = $field;
+//        }
+//    }
 
     public function getExtendClass(): string
     {
