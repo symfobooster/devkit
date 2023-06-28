@@ -4,36 +4,35 @@ namespace Symfobooster\Devkit\Maker;
 
 use Nette\PhpGenerator\PhpFile;
 use Symfobooster\Devkit\Maker\Endpoint\Manifest\Manifest;
-use Symfony\Bundle\MakerBundle\ConsoleStyle;
-use Symfony\Bundle\MakerBundle\Generator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 abstract class AbstractMaker implements MakerInterface
 {
     protected InputInterface $input;
-    protected ConsoleStyle $io;
-    protected Generator $generator;
+    protected SymfonyStyle $io;
     protected Manifest $manifest;
     protected Storage $storage;
+    private string $projectDir;
 
     public function __construct(
         InputInterface $input,
-        ConsoleStyle $io,
-        Generator $generator,
+        SymfonyStyle $io,
         Manifest $manifest,
-        Storage $storage
+        Storage $storage,
+        string $projectDir
     ) {
         $this->input = $input;
         $this->io = $io;
-        $this->generator = $generator;
         $this->manifest = $manifest;
         $this->storage = $storage;
+        $this->projectDir = $projectDir;
     }
 
     protected function readConfigFile(string $path): ?array
     {
-        return $this->readYamlFile($this->generator->getRootDirectory() . '/config' . $path);
+        return $this->readYamlFile($this->projectDir . '/config' . $path);
     }
 
     protected function readYamlFile(string $path): ?array
@@ -48,7 +47,7 @@ abstract class AbstractMaker implements MakerInterface
 
     protected function writeConfigFile(string $path, array $config): void
     {
-        $this->writeYamlFile($this->generator->getRootDirectory() . '/config' . $path, $config);
+        $this->writeYamlFile($this->projectDir . '/config' . $path, $config);
     }
 
     protected function writeYamlFile(string $path, array $data): void
@@ -63,7 +62,7 @@ abstract class AbstractMaker implements MakerInterface
 
     protected function writeClassFile(string $path, string $content): void
     {
-        $realPath = $this->generator->getRootDirectory() . '/src' . $path;
+        $realPath = $this->projectDir . '/src' . $path;
 
         $directory = dirname($realPath);
         if (!file_exists($directory)) {

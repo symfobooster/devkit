@@ -2,7 +2,14 @@
 
 namespace Symfobooster\Devkit\Command;
 
+use Symfobooster\Devkit\Maker\Endpoint\Maker\EndpointConfigMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTestMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\InputMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\OutputMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\RouterMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\ServiceMaker;
 use Symfobooster\Devkit\Maker\Endpoint\Manifest\Manifest;
+use Symfobooster\Devkit\Maker\Storage;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -55,11 +62,34 @@ class MakeEndpointCommand extends Command
         $extractor = new PropertyInfoExtractor([], [new ReflectionExtractor()]);
         $serializer = new Serializer([new ObjectNormalizer(null, null, null, $extractor)], [new YamlEncoder()]);
         $manifest = $serializer->deserialize(file_get_contents($manifestFilePath), Manifest::class, 'yml');
-        var_dump($manifest);
+        // TODO here is need to add validation
+        $storage = new Storage();
 
-//====
+        foreach ($this->getMakers() as $maker) {
+            $maker = new $maker($input, $io, $manifest, $storage, $this->projectDir);
+            try {
+                $maker->make();
+            } catch (RuntimeCommandException $exception) {
+                echo $exception->getMessage();
+            }
+        }
+
+        $this->writeSuccessMessage($io);
+
         $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
 
         return Command::SUCCESS;
+    }
+
+    private function getMakers(): array
+    {
+        return [
+//            InputMaker::class,
+            OutputMaker::class,
+            ServiceMaker::class,
+            EndpointConfigMaker::class,
+//            RouterMaker::class,
+//            FunctionalTestMaker::class,
+        ];
     }
 }
