@@ -31,11 +31,16 @@ class ManifestLoader
         if (!file_exists($manifestFilePath)) {
             throw new Exception('Manifest file not found in ' . $manifestFilePath);
         }
-        $this->validate($manifestFilePath);
+        $data = $this->getData($manifestFilePath);
+        $this->validate($data);
 
         $reflectionExtractor = new ReflectionExtractor();
         $phpDocExtractor = new PhpDocExtractor();
-        $propertyTypeExtractor = new PropertyInfoExtractor([$reflectionExtractor], [$phpDocExtractor, $reflectionExtractor], [$phpDocExtractor], [$reflectionExtractor], [$reflectionExtractor]);
+        $propertyTypeExtractor = new PropertyInfoExtractor([$reflectionExtractor],
+            [$phpDocExtractor, $reflectionExtractor],
+            [$phpDocExtractor],
+            [$reflectionExtractor],
+            [$reflectionExtractor]);
 
         $normalizer = new ObjectNormalizer(null, null, null, $propertyTypeExtractor);
         $arrayNormalizer = new ArrayDenormalizer();
@@ -44,18 +49,49 @@ class ManifestLoader
 //        $extractor = new PropertyInfoExtractor([], [new ReflectionExtractor()]);
 //        $serializer = new Serializer([new ObjectNormalizer(null, null, null, $propertyTypeExtractor)], [new YamlEncoder()]);
 
-        return $serializer->denormalize(Yaml::parseFile($manifestFilePath), Manifest::class);
+        return $serializer->denormalize($data, Manifest::class);
 
         return $serializer->deserialize(file_get_contents($manifestFilePath), Manifest::class, 'yml');
     }
 
-    private function validate(string $manifestFilePath): void
+    private function validate(array $data): void
     {
-        $data = Yaml::parseFile($manifestFilePath);
         $violations = $this->validator->validate($data, Manifest::getValidators());
 
         if (count($violations) > 0) {
             throw new InvalidInputException($violations);
         }
+    }
+
+    private function getData(string $manifestFilePath): array
+    {
+        $data = Yaml::parseFile($manifestFilePath);
+        $data = $this->transformInput($data);
+
+        return $data;
+    }
+
+    public function transformInput(array $data): array
+    {
+        if (empty($data['input']) || empty($data['input']['fields'])) {
+            return $data;
+        }
+
+        $fields = [];
+        foreach ($data['input']['fields'] as $name => $value) {
+            if (empty($value)) {
+                $fields[] = ['name' => $name];
+                continue;
+            }
+            if (!is_array($value)) {
+                $fields[] = $value;
+                continue;
+            }
+            $fields[] = array_merge($value, ['name' => $name]);
+        }
+
+        $data['input']['fields'] = $fields;
+
+        return $data;
     }
 }

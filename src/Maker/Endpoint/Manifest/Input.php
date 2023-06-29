@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Input implements InputInterface
 {
     /** @var Field[] $fields */
-    private array $fields = [];
+    public array $fields = [];
 //    public bool $hasMuted = false;
 //    public bool $hadRenamed = false;
 
@@ -44,18 +44,5 @@ class Input implements InputInterface
                 ],
             ],
         ]);
-    }
-
-    /**
-     * @param Field[] $fields
-     */
-    public function setFields(array $fields): void
-    {
-        $this->fields = $fields;
-    }
-
-    public function addField(Field $field)
-    {
-        $this->fields[] = $field;
     }
 }
