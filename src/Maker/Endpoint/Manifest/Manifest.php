@@ -2,7 +2,11 @@
 
 namespace Symfobooster\Devkit\Maker\Endpoint\Manifest;
 
-class Manifest
+use Symfobooster\Base\Input\InputInterface;
+use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Constraints as Assert;
+
+class Manifest implements InputInterface
 {
     public const
         TYPE_SIMPLE = 'default',
@@ -13,16 +17,64 @@ class Manifest
         TYPE_DELETE = 'delete';
 
     public string $type = 'default';
-    public string $domain;
-    public string $endpoint;
+    public string $controller;
+    public string $action;
     public string $method = 'GET';
     public Service $service;
     public Input $input;
     public Output $output;
     public Special $special;
 
-    public function __construct()
+    public static function getValidators(): Constraint
     {
-        $this->output = new Output();
+        return new Assert\Collection([
+            'type' => [
+                new Assert\Optional([
+                    new Assert\Type('string'),
+                    new Assert\Choice(self::getTypes()),
+                ]),
+            ],
+            'controller' => [
+                new Assert\Required(),
+                new Assert\Regex('|^[\w\-\_]+$|'),
+            ],
+            'action' => [
+                new Assert\Required(),
+                new Assert\Regex('|^[\w\-\_]+$|'),
+            ],
+            'method' => [
+                new Assert\Optional([
+                    new Assert\Type('string'),
+                    new Assert\Choice(self::getMethods()),
+                ]),
+            ],
+            'input' => [
+                new Assert\Optional([
+                    Input::getValidators(),
+                ]),
+            ],
+            'service' => [
+                new Assert\Optional([
+                    Service::getValidators(),
+                ]),
+            ],
+        ]);
+    }
+
+    public static function getTypes(): array
+    {
+        return [
+            self::TYPE_SIMPLE,
+            self::TYPE_LIST,
+            self::TYPE_VIEW,
+            self::TYPE_CREATE,
+            self::TYPE_UPDATE,
+            self::TYPE_DELETE,
+        ];
+    }
+
+    public static function getMethods(): array
+    {
+        return ['GET', 'POST', 'PUT', 'DELETE'];
     }
 }

@@ -2,9 +2,17 @@ services:
   _defaults:
     autowire: true
     autoconfigure: true
-    bind:
-      $projectDir: '%kernel.project_dir%'
 
-  Symfobooster\Devkit\Command\MakeEndpointCommand:
+  command.make.endpoint:
+    class: Symfobooster\Devkit\Command\MakeEndpointCommand
+    arguments:
+      $projectDir: '%kernel.project_dir%'
+      $manifestLoader: '@make.endpoint.manifest_loader'
     tags:
       - { name: 'console.command' }
+
+  make.endpoint.manifest_loader:
+    class: Symfobooster\Devkit\Maker\Endpoint\ManifestLoader
+    arguments:
+      $projectDir: '%kernel.project_dir%'
+      $validator: '@Symfony\Component\Validator\Validator\ValidatorInterface'
