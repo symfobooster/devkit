@@ -9,21 +9,21 @@ class RouterMaker extends AbstractMaker
     public function make(): void
     {
         $domainRouter = $this->readYamlFile($this->getDomainRouterPath()) ?? [];
-        $key = $this->manifest->domain . '_' . $this->manifest->endpoint;
+        $key = $this->manifest->controller . '_' . $this->manifest->action;
         if (!array_key_exists($key, $domainRouter)) {
             $domainRouter[$key] = [
-                'path' => '/' . $this->manifest->endpoint,
-                'controller' => $this->manifest->domain . '.' . $this->manifest->endpoint . '.controller::action',
+                'path' => '/' . $this->manifest->action,
+                'controller' => $this->manifest->controller . '.' . $this->manifest->action . '.controller::action',
                 'methods' => [strtoupper($this->manifest->method)],
             ];
             $this->writeYamlFile($this->getDomainRouterPath(), $domainRouter);
         }
 
         $router = $this->readYamlFile($this->getRouterPath()) ?? [];
-        if (!array_key_exists($this->manifest->domain, $router)) {
-            $router[$this->manifest->domain] = [
-                'resource' => './routes/' . $this->manifest->domain . '.yml',
-                'prefix' => '/' . $this->manifest->domain . '/',
+        if (!array_key_exists($this->manifest->controller, $router)) {
+            $router[$this->manifest->controller] = [
+                'resource' => './routes/' . $this->manifest->controller . '.yml',
+                'prefix' => '/' . $this->manifest->controller . '/',
             ];
 
             $this->writeYamlFile($this->getRouterPath(), $router);
@@ -32,7 +32,7 @@ class RouterMaker extends AbstractMaker
 
     private function getDomainRouterPath(): string
     {
-        return $this->generator->getRootDirectory() . '/config/routes/' . $this->manifest->domain . '.yml';
+        return $this->generator->getRootDirectory() . '/config/routes/' . $this->manifest->controller . '.yml';
     }
 
     private function getRouterPath(): string

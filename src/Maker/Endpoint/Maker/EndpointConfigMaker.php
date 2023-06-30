@@ -8,13 +8,13 @@ use function Symfony\Component\String\u;
 
 class EndpointConfigMaker extends AbstractMaker
 {
-    private string $domainSnake;
-    private string $endpointSnake;
+    private string $controllerSnake;
+    private string $actionSnake;
 
     public function make(): void
     {
-        $this->domainSnake = u($this->manifest->domain)->snake();
-        $this->endpointSnake = u($this->manifest->endpoint)->snake();
+        $this->controllerSnake = u($this->manifest->controller)->snake();
+        $this->actionSnake = u($this->manifest->action)->snake();
         $this->writeEndpoint();
         $this->writeCollection();
         $this->writeEndpoints();
@@ -22,7 +22,7 @@ class EndpointConfigMaker extends AbstractMaker
 
     private function writeEndpoint(): void
     {
-        $prefix = $this->domainSnake . '.' . $this->endpointSnake;
+        $prefix = $this->controllerSnake . '.' . $this->actionSnake;
 
         $config = [
             'services' => [
@@ -47,18 +47,18 @@ class EndpointConfigMaker extends AbstractMaker
             ],
         ];
 
-        $fileName = '/endpoints/' . $this->domainSnake . '/' . $this->endpointSnake . '.yml';
+        $fileName = '/endpoints/' . $this->controllerSnake . '/' . $this->actionSnake . '.yml';
         $this->writeConfigFile($fileName, $config);
     }
 
     private function writeCollection(): void
     {
-        $path = '/endpoints/' . $this->manifest->domain . '.yml';
+        $path = '/endpoints/' . $this->manifest->controller . '.yml';
         $config = $this->readConfigFile($path) ?? [];
         if (!array_key_exists('imports', $config)) {
             $config['imports'] = [];
         }
-        $resource = ['resource' => $this->domainSnake . '/' . $this->endpointSnake . '.yml'];
+        $resource = ['resource' => $this->controllerSnake . '/' . $this->actionSnake . '.yml'];
         if (array_search($resource, $config['imports']) === false) {
             $config['imports'][] = $resource;
         }
@@ -73,7 +73,7 @@ class EndpointConfigMaker extends AbstractMaker
         if (!array_key_exists('imports', $config)) {
             $config['imports'] = [];
         }
-        $resource = ['resource' => $this->manifest->domain . '.yml'];
+        $resource = ['resource' => $this->manifest->controller . '.yml'];
         if (array_search($resource, $config['imports']) === false) {
             $config['imports'][] = $resource;
         }

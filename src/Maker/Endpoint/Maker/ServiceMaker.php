@@ -17,8 +17,8 @@ class ServiceMaker extends AbstractMaker
     public function make(): void
     {
         $generator = new ClassMaker(
-            'App\\Domain\\' . ucfirst($this->manifest->domain) . '\\' . ucfirst(
-                $this->manifest->endpoint
+            'App\\Domain\\' . ucfirst($this->manifest->controller) . '\\' . ucfirst(
+                $this->manifest->action
             ) . '\\Service'
         );
         $namespace = $generator->getNamespace();

@@ -13,12 +13,13 @@ class OutputMaker extends AbstractMaker
     public function make(): void
     {
         $generator = new ClassMaker(
-            'App\\Domain\\' . ucfirst($this->manifest->domain) . '\\' . ucfirst($this->manifest->endpoint) . '\\Output',
+            'App\\Domain\\' . ucfirst($this->manifest->controller) . '\\' . ucfirst($this->manifest->action) . '\\Output',
             $this->manifest->output->getExtendClass()
         );
 
         $class = $generator->getClass();
         $class->setExtends($this->manifest->output->getExtendClass());
+
 
         $class->addMethod('getData')
             ->setReturnType('array|object|string|null')

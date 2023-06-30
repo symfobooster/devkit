@@ -10,8 +10,8 @@ class FunctionalTestMaker extends AbstractMaker
     public function make(): void
     {
         $serviceDetails = $this->generator->createClassNameDetails(
-            $this->manifest->endpoint,
-            'Tests\\Functional\\' . ucfirst($this->manifest->domain) . '\\',
+            $this->manifest->action,
+            'Tests\\Functional\\' . ucfirst($this->manifest->controller) . '\\',
             'Test'
         );
 

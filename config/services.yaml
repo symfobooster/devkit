@@ -6,7 +6,7 @@ services:
   command.make.endpoint:
     class: Symfobooster\Devkit\Command\MakeEndpointCommand
     arguments:
-      $projectDir: '%kernel.project_dir%'
+      $projectDir: '%kernel.project_dir%/src'
       $manifestLoader: '@make.endpoint.manifest_loader'
     tags:
       - { name: 'console.command' }
@@ -14,5 +14,5 @@ services:
   make.endpoint.manifest_loader:
     class: Symfobooster\Devkit\Maker\Endpoint\ManifestLoader
     arguments:
-      $projectDir: '%kernel.project_dir%'
+      $projectDir: '%kernel.project_dir%/src'
       $validator: '@Symfony\Component\Validator\Validator\ValidatorInterface'

@@ -27,7 +27,7 @@ class ManifestLoader
 
     public function loadFromFile(string $fileName): Manifest
     {
-        $manifestFilePath = $this->projectDir . '/' . $fileName;
+        $manifestFilePath = dirname($this->projectDir) . '/' . $fileName;
         if (!file_exists($manifestFilePath)) {
             throw new Exception('Manifest file not found in ' . $manifestFilePath);
         }
@@ -36,22 +36,19 @@ class ManifestLoader
 
         $reflectionExtractor = new ReflectionExtractor();
         $phpDocExtractor = new PhpDocExtractor();
-        $propertyTypeExtractor = new PropertyInfoExtractor([$reflectionExtractor],
+        $propertyTypeExtractor = new PropertyInfoExtractor(
+            [$reflectionExtractor],
             [$phpDocExtractor, $reflectionExtractor],
             [$phpDocExtractor],
             [$reflectionExtractor],
-            [$reflectionExtractor]);
+            [$reflectionExtractor]
+        );
 
         $normalizer = new ObjectNormalizer(null, null, null, $propertyTypeExtractor);
         $arrayNormalizer = new ArrayDenormalizer();
         $serializer = new Serializer([$arrayNormalizer, $normalizer]);
 
-//        $extractor = new PropertyInfoExtractor([], [new ReflectionExtractor()]);
-//        $serializer = new Serializer([new ObjectNormalizer(null, null, null, $propertyTypeExtractor)], [new YamlEncoder()]);
-
         return $serializer->denormalize($data, Manifest::class);
-
-        return $serializer->deserialize(file_get_contents($manifestFilePath), Manifest::class, 'yml');
     }
 
     private function validate(array $data): void

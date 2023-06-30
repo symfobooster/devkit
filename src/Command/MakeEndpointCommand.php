@@ -4,9 +4,12 @@ namespace Symfobooster\Devkit\Command;
 
 use Symfobooster\Base\Input\Exception\InvalidInputException;
 use Symfobooster\Devkit\Maker\Endpoint\Maker\EndpointConfigMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\InputMaker;
 use Symfobooster\Devkit\Maker\Endpoint\Maker\OutputMaker;
 use Symfobooster\Devkit\Maker\Endpoint\Maker\ServiceMaker;
 use Symfobooster\Devkit\Maker\Endpoint\ManifestLoader;
+use Symfobooster\Devkit\Maker\FileStorage;
+use Symfobooster\Devkit\Maker\FileWriter;
 use Symfobooster\Devkit\Maker\Storage;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -51,17 +54,19 @@ class MakeEndpointCommand extends Command
         }
 
         $storage = new Storage();
+        $storage->set('projectDir', $this->projectDir);
+        $fileStorage = new FileStorage();
 
         foreach ($this->getMakers() as $maker) {
-            $maker = new $maker($input, $io, $manifest, $storage, $this->projectDir);
+            $maker = new $maker($manifest, $storage, $fileStorage);
             try {
                 $maker->make();
             } catch (RuntimeCommandException $exception) {
                 echo $exception->getMessage();
             }
         }
-
-        $this->writeSuccessMessage($io);
+        $fileWriter = new FileWriter($fileStorage, $this->projectDir);
+        $fileWriter->writeFiles();
 
         $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
 
@@ -71,10 +76,10 @@ class MakeEndpointCommand extends Command
     private function getMakers(): array
     {
         return [
-//            InputMaker::class,
-            OutputMaker::class,
-            ServiceMaker::class,
-            EndpointConfigMaker::class,
+            InputMaker::class,
+//            OutputMaker::class,
+//            ServiceMaker::class,
+//            EndpointConfigMaker::class,
 //            RouterMaker::class,
 //            FunctionalTestMaker::class,
         ];
