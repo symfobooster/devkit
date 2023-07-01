@@ -37,6 +37,7 @@ class Input implements InputInterface
                 'fields' => [
                     new Assert\Optional([
                         new Assert\Type('array'),
+                        new Assert\Count(null, 1, 100),
                         new Assert\All([
                             Field::getValidators(),
                         ])

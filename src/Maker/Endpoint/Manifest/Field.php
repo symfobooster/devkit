@@ -8,9 +8,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class Field implements InputInterface
 {
-//    public function __construct(string $name) {
-//        $this->name = $name;
-//    }
     public string $name;
     public string $type;
     public string $source;
