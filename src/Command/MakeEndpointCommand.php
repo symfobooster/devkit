@@ -77,8 +77,8 @@ class MakeEndpointCommand extends Command
     {
         return [
             InputMaker::class,
-//            OutputMaker::class,
-//            ServiceMaker::class,
+            OutputMaker::class,
+            ServiceMaker::class,
 //            EndpointConfigMaker::class,
 //            RouterMaker::class,
 //            FunctionalTestMaker::class,

@@ -58,6 +58,11 @@ class Manifest implements InputInterface
                     Service::getValidators(),
                 ]),
             ],
+            'output' => [
+                new Assert\Optional([
+                    Output::getValidators(),
+                ]),
+            ],
         ]);
     }
 

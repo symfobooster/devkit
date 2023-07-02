@@ -20,6 +20,16 @@ class Service implements InputInterface
                     new Assert\Type('boolean'),
                 ]),
             ],
+            'repository' => [
+                new Assert\Optional([
+                    new Assert\Type('string'),
+                ]),
+            ],
+            'entity' => [
+                new Assert\Optional([
+                    new Assert\Type('string'),
+                ]),
+            ],
         ]);
     }
 }

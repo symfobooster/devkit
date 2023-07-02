@@ -59,7 +59,7 @@ class Field implements InputInterface
     {
         return [
             'string',
-            'integer',
+            'int',
             'array',
             'boolean',
             'float',

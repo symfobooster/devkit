@@ -2,11 +2,11 @@
 
 namespace Symfobooster\Devkit\Maker\Endpoint\Manifest;
 
-use Symfobooster\Devkit\Hydrator;
-use Symfobooster\Devkit\Output\Created;
-use Symfobooster\Devkit\Output\Success;
+use Symfobooster\Base\Input\InputInterface;
+use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Constraints as Assert;
 
-class Output
+class Output implements InputInterface
 {
     private const KINDS = ['success', 'created'];
     private const EXTEND_CLASSES = [
@@ -15,28 +15,23 @@ class Output
     ];
 
     public string $kind = 'success';
-    /** @var Field[] */
+    /** @var Field[] $fields */
     public array $fields = [];
 
-//    public function setFields(array $fields): void
-//    {
-//        $hydrator = new Hydrator();
-//        foreach ($fields as $key => $manifest) {
-//            /** @var Field $field */
-//            $field = $hydrator->hydrate(Field::class, $manifest ?? ['name' => $key]);
-//            $field->name = $key;
-//            if ($field->muted) {
-//                $this->hasMuted = true;
-//            }
-//            if ($field->renamed) {
-//                $this->hadRenamed = true;
-//            }
-//            $this->fields[] = $field;
-//        }
-//    }
-
-    public function getExtendClass(): string
+    public static function getValidators(): Constraint
     {
-        return self::EXTEND_CLASSES[$this->kind];
+        return new Assert\Collection([
+            'fields' => [ // fields is reserved word in Collection
+                'fields' => [
+                    new Assert\Optional([
+                        new Assert\Type('array'),
+                        new Assert\Count(null, 1, 100),
+                        new Assert\All([
+                            Field::getValidators(),
+                        ])
+                    ]),
+                ],
+            ],
+        ]);
     }
 }

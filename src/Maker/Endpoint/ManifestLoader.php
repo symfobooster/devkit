@@ -63,19 +63,21 @@ class ManifestLoader
     private function getData(string $manifestFilePath): array
     {
         $data = Yaml::parseFile($manifestFilePath);
-        $data = $this->transformInput($data);
+        $data = $this->transformFields('input', $data);
+        $data = $this->transformFields('output', $data);
 
         return $data;
     }
 
-    public function transformInput(array $data): array
+    private function transformFields(string $block, array $data): array
     {
-        if (empty($data['input']) || empty($data['input']['fields'])) {
+
+        if (empty($data[$block]) || empty($data[$block]['fields'])) {
             return $data;
         }
 
         $fields = [];
-        foreach ($data['input']['fields'] as $name => $value) {
+        foreach ($data[$block]['fields'] as $name => $value) {
             if (empty($value)) {
                 $fields[] = ['name' => $name];
                 continue;
@@ -87,7 +89,7 @@ class ManifestLoader
             $fields[] = array_merge($value, ['name' => $name]);
         }
 
-        $data['input']['fields'] = $fields;
+        $data[$block]['fields'] = $fields;
 
         return $data;
     }

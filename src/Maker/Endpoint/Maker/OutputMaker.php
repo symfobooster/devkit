@@ -2,7 +2,8 @@
 
 namespace Symfobooster\Devkit\Maker\Endpoint\Maker;
 
-use Nette\PhpGenerator\PhpFile;
+use Nette\PhpGenerator\ClassType;
+use Symfobooster\Base\Output\Attributes\SuccessMarker;
 use Symfobooster\Devkit\Maker\AbstractMaker;
 use Symfobooster\Devkit\Maker\Endpoint\ClassMaker;
 use Symfobooster\Devkit\Maker\Endpoint\Manifest\Field;
@@ -13,27 +14,29 @@ class OutputMaker extends AbstractMaker
     public function make(): void
     {
         $generator = new ClassMaker(
-            'App\\Domain\\' . ucfirst($this->manifest->controller) . '\\' . ucfirst($this->manifest->action) . '\\Output',
-            $this->manifest->output->getExtendClass()
+            'App\\' . ucfirst($this->manifest->controller) . '\\' . ucfirst(
+                $this->manifest->action
+            ) . '\\Output',
         );
+        $generator->getNamespace()->addUse(SuccessMarker::class);
 
         $class = $generator->getClass();
-        $class->setExtends($this->manifest->output->getExtendClass());
+        $class->addAttribute(SuccessMarker::class);
+        $this->addProperties($class);
 
+        $this->storage->set('outputClass', $class->getName());
+        $this->fileStorage->addFile($generator->getPath(), $generator->getContent());
+    }
 
-        $class->addMethod('getData')
-            ->setReturnType('array|object|string|null')
-            ->addBody('return [];');
-
+    private function addProperties(ClassType $class): void
+    {
+        if (empty($this->manifest->output)) {
+            return;
+        }
         /** @var Field $field */
         foreach ($this->manifest->output->fields as $field) {
             $class->addProperty($field->name)
-                ->setType($field->type)
-                ->setPrivate();
+                ->setType($field->type);
         }
-
-        $this->storage->set('outputClass', $class->getName());
-
-        $this->writeClassFile($generator->getPath(), $generator->getContent());
     }
 }

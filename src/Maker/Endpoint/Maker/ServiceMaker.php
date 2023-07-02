@@ -3,27 +3,24 @@
 namespace Symfobooster\Devkit\Maker\Endpoint\Maker;
 
 use Nette\PhpGenerator\Method;
-use Symfobooster\Devkit\Input\InputInterface;
+use Symfobooster\Base\Input\InputInterface;
+use Symfobooster\Base\Output\Success;
+use Symfobooster\Base\Service\ServiceInterface;
 use Symfobooster\Devkit\Maker\AbstractMaker;
 use Symfobooster\Devkit\Maker\Endpoint\ClassMaker;
 use Symfobooster\Devkit\Maker\Endpoint\Manifest\Manifest;
-use Symfobooster\Devkit\Output\NotFound;
-use Symfobooster\Devkit\Output\OutputInterface;
-use Symfobooster\Devkit\Output\Success;
-use Symfobooster\Devkit\Service\ServiceInterface;
 
 class ServiceMaker extends AbstractMaker
 {
     public function make(): void
     {
         $generator = new ClassMaker(
-            'App\\Domain\\' . ucfirst($this->manifest->controller) . '\\' . ucfirst(
+            'App\\' . ucfirst($this->manifest->controller) . '\\' . ucfirst(
                 $this->manifest->action
             ) . '\\Service'
         );
         $namespace = $generator->getNamespace();
         $namespace->addUse(ServiceInterface::class);
-        $namespace->addUse(OutputInterface::class);
         $namespace->addUse(InputInterface::class);
         $namespace->addUse($namespace->getName() . '\\' . $this->storage->get('outputClass'));
 
@@ -42,9 +39,13 @@ class ServiceMaker extends AbstractMaker
             case Manifest::TYPE_DELETE:
                 $this->makeDeleteService($generator);
                 break;
+            default:
+                $this->makeDefaultService($generator);
+                break;
         }
 
-        $this->writeClassFile($generator->getPath(), $generator->getContent());
+        $this->storage->set('serviceClass', $generator->getClass()->getName());
+        $this->fileStorage->addFile($generator->getPath(), $generator->getContent());
     }
 
     private function makeListService(ClassMaker $generator): void
@@ -98,8 +99,7 @@ EOT;
     private function addBehave(ClassMaker $generator): Method
     {
         $method = $generator->getClass()->addMethod('behave');
-        $method
-            ->setReturnType(OutputInterface::class);
+        $method->setReturnType('mixed');
         $method->addParameter('input')->setType(InputInterface::class);
 
         return $method;
@@ -111,7 +111,6 @@ EOT;
         $entityVar = $this->getVariableByClass($this->manifest->service->entity);
         $repositoryVar = $this->getVariableByClass($this->manifest->service->repository);
         $generator->getNamespace()->addUse(Success::class);
-
 
         $behave->addBody("\n\n");
         $behave->addBody('$this->' . $repositoryVar . '->persist($' . $entityVar . ');');
@@ -129,5 +128,10 @@ EOT;
         $behave->addBody('$this->' . $repositoryVar . '->delete($' . $entityVar . ');');
         $behave->addBody('');
         $behave->addBody('return new Success();');
+    }
+
+    private function makeDefaultService(ClassMaker $generator):void
+    {
+        $this->addBehave($generator);
     }
 }
