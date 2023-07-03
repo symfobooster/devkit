@@ -4,6 +4,7 @@ namespace Symfobooster\Devkit\Command;
 
 use Symfobooster\Base\Input\Exception\InvalidInputException;
 use Symfobooster\Devkit\Maker\Endpoint\Maker\EndpointConfigMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTestMaker;
 use Symfobooster\Devkit\Maker\Endpoint\Maker\InputMaker;
 use Symfobooster\Devkit\Maker\Endpoint\Maker\OutputMaker;
 use Symfobooster\Devkit\Maker\Endpoint\Maker\RouterMaker;
@@ -82,7 +83,7 @@ class MakeEndpointCommand extends Command
             ServiceMaker::class,
             EndpointConfigMaker::class,
             RouterMaker::class,
-//            FunctionalTestMaker::class,
+            FunctionalTestMaker::class,
         ];
     }
 }
