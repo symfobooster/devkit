@@ -8,7 +8,7 @@ class RouterMaker extends AbstractMaker
 {
     public function make(): void
     {
-        $domainRouter = $this->readYamlFile($this->getDomainRouterPath()) ?? [];
+        $domainRouter = $this->readYamlFile('/config/routes/' . $this->manifest->controller . '.yml') ?? [];
         $key = $this->manifest->controller . '_' . $this->manifest->action;
         if (!array_key_exists($key, $domainRouter)) {
             $domainRouter[$key] = [
@@ -16,27 +16,18 @@ class RouterMaker extends AbstractMaker
                 'controller' => $this->manifest->controller . '.' . $this->manifest->action . '.controller::action',
                 'methods' => [strtoupper($this->manifest->method)],
             ];
-            $this->writeYamlFile($this->getDomainRouterPath(), $domainRouter);
+
+            $this->fileStorage->addFile('/config/routes/' . $this->manifest->controller . '.yml', $domainRouter);
         }
 
-        $router = $this->readYamlFile($this->getRouterPath()) ?? [];
+        $router = $this->readYamlFile('/config/routes.yaml') ?? [];
         if (!array_key_exists($this->manifest->controller, $router)) {
             $router[$this->manifest->controller] = [
                 'resource' => './routes/' . $this->manifest->controller . '.yml',
                 'prefix' => '/' . $this->manifest->controller . '/',
             ];
 
-            $this->writeYamlFile($this->getRouterPath(), $router);
+            $this->fileStorage->addFile('/config/routes.yaml', $router);
         }
-    }
-
-    private function getDomainRouterPath(): string
-    {
-        return $this->generator->getRootDirectory() . '/config/routes/' . $this->manifest->controller . '.yml';
-    }
-
-    private function getRouterPath(): string
-    {
-        return $this->generator->getRootDirectory() . '/config/routes.yaml';
     }
 }

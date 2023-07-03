@@ -48,7 +48,7 @@ class EndpointConfigMaker extends AbstractMaker
         ];
 
         $fileName = '/endpoints/' . $this->controllerSnake . '/' . $this->actionSnake . '.yml';
-        $this->writeConfigFile($fileName, $config);
+        $this->fileStorage->addFile('/config' . $fileName, $config);
     }
 
     private function writeCollection(): void
@@ -63,7 +63,7 @@ class EndpointConfigMaker extends AbstractMaker
             $config['imports'][] = $resource;
         }
 
-        $this->writeConfigFile($path, $config);
+        $this->fileStorage->addFile('/config' . $path, $config);
     }
 
     private function writeEndpoints(): void
@@ -78,6 +78,6 @@ class EndpointConfigMaker extends AbstractMaker
             $config['imports'][] = $resource;
         }
 
-        $this->writeConfigFile($path, $config);
+        $this->fileStorage->addFile('/config' . $path, $config);
     }
 }

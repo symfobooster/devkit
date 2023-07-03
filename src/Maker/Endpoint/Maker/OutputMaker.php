@@ -24,8 +24,8 @@ class OutputMaker extends AbstractMaker
         $class->addAttribute(SuccessMarker::class);
         $this->addProperties($class);
 
-        $this->storage->set('outputClass', $class->getName());
-        $this->fileStorage->addFile($generator->getPath(), $generator->getContent());
+        $this->storage->set('outputClass', $generator->getNamespace()->getName() . '\\' . $class->getName());
+        $this->fileStorage->addFile('/src' . $generator->getPath(), $generator->getContent());
     }
 
     private function addProperties(ClassType $class): void

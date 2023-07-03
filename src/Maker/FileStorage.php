@@ -7,7 +7,7 @@ class FileStorage
     /** @var File[] */
     private array $files = [];
 
-    public function addFile(string $path, string $content): self
+    public function addFile(string $path, mixed $content): self
     {
         if ($this->hasFile($path)) {
             throw new \Exception('File `' . $path . '` is already exists in list');

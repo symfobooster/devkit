@@ -44,8 +44,8 @@ class ServiceMaker extends AbstractMaker
                 break;
         }
 
-        $this->storage->set('serviceClass', $generator->getClass()->getName());
-        $this->fileStorage->addFile($generator->getPath(), $generator->getContent());
+        $this->storage->set('serviceClass', $namespace->getName() . '\\' . $generator->getClass()->getName());
+        $this->fileStorage->addFile('/src' . $generator->getPath(), $generator->getContent());
     }
 
     private function makeListService(ClassMaker $generator): void

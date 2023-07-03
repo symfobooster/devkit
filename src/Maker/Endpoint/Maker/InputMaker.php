@@ -27,8 +27,8 @@ class InputMaker extends AbstractMaker
         $this->addMethodGetValidators($class);
         $this->addProperties($class, $namespace);
 
-        $this->storage->set('inputClass', $class->getName());
-        $this->fileStorage->addFile($generator->getPath(), $generator->getContent());
+        $this->storage->set('inputClass', $namespace->getName() . '\\' . $class->getName());
+        $this->fileStorage->addFile('/src' . $generator->getPath(), $generator->getContent());
     }
 
     private function prepareClass(ClassType $class, PhpNamespace $namespace): void

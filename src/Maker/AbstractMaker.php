@@ -28,8 +28,10 @@ abstract class AbstractMaker implements MakerInterface
 
     protected function readYamlFile(string $path): ?array
     {
+        $path = $this->storage->get('projectDir') . $path;
         if (file_exists($path)) {
             $yaml = file_get_contents($path);
+
             return Yaml::parse($yaml);
         }
 
@@ -45,6 +47,7 @@ abstract class AbstractMaker implements MakerInterface
     {
         $pieces = explode('\\', $class);
         $className = end($pieces);
+
         return str_replace('Interface', '', $className);
     }
 }

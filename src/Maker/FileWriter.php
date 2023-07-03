@@ -29,6 +29,7 @@ class FileWriter
                 default:
                     throw new \Exception('Undefined type "' . $file->type . '" for writing to ' . $file->fullName);
             }
+            echo 'Wrote file: ' . $file->fullName . PHP_EOL;
         }
     }
 
