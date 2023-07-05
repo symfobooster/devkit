@@ -4,6 +4,7 @@ namespace Symfobooster\Devkit\Maker\Endpoint\Maker;
 
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Dumper;
+use Nette\PhpGenerator\Method;
 use Nette\PhpGenerator\PhpNamespace;
 use Symfobooster\Devkit\Maker\AbstractMaker;
 use Symfobooster\Devkit\Maker\Endpoint\ClassMaker;
@@ -32,20 +33,9 @@ class FunctionalTestMaker extends AbstractMaker
         $class->addTrait(ClientTrait::class);
 
         $this->addRequiredTest($namespace, $class);
+        $this->addGetRequestMethod($namespace, $class);
 
         $this->fileStorage->addFile('/' . lcfirst($generator->getPath()), $generator->getContent());
-    }
-
-    public function getDataExample(Field $field): mixed
-    {
-        $examples = [
-            'int' => 108,
-            'string' => "'Foobar'",
-            'bool' => 'true',
-            'array' => '[]',
-        ];
-
-        return array_key_exists($field->type, $examples) ? $examples[$field->type] : 'Example';
     }
 
     private function addRequiredTest(PhpNamespace $namespace, ClassType $class): void
@@ -64,12 +54,64 @@ class FunctionalTestMaker extends AbstractMaker
             return;
         }
         $test = $class->addMethod('testRequired')
-            ->setReturnType('void');
-        $test->setComment('@dataProvider getRequiredFields');
+            ->setReturnType('void')
+            ->setComment('@dataProvider getRequiredFields');
         $test->addParameter('field')->setType('string');
+        $this->printEndpointCall($test, function () use ($test) {
+            $test->addBody('unset($request[$field]);');
+        }, false);
+        $test->addBody('$this->checkNotValid([$field]);');
 
         $provider = $class->addMethod('getRequiredFields');
         $provider->setReturnType('array');
         $provider->setBody('return ' . $this->dumper->dump($fields) . ';');
+    }
+
+    private function printEndpointCall(
+        Method $method,
+        ?\Closure $requestIsVariable = null,
+        bool $responseIsVariable = true
+    ): void {
+        $request = '$this->getRequest()';
+        if (null !== $requestIsVariable) {
+            $request = '$request';
+            $method->addBody('$request = $this->getRequest();');
+            $requestIsVariable();
+            $method->addBody('');
+        }
+        $response = $responseIsVariable ? '$response = ' : '';
+        $methodName = 'send' . ucfirst(strtolower($this->manifest->method));
+        $url = '/' . strtolower($this->manifest->controller) . '/' . strtolower($this->manifest->action);
+
+        $method->addBody($response . '$this->' . $methodName . '(\'' . $url . '\', ' . $request . ');');
+    }
+
+    private function addGetRequestMethod(PhpNamespace $namespace, ClassType $class): void
+    {
+        $method = $class->addMethod('getRequest')
+            ->setPrivate()
+            ->setReturnType('array');
+
+        $result = [];
+        if (!empty($this->manifest->input) || !empty($this->manifest->input->fields)) {
+            foreach ($this->manifest->input->fields as $field) {
+                $result[$field->name] = $this->getDataExample($field);
+            }
+        }
+
+        $method->setBody('return ' . $this->dumper->dump($result) . ';');
+    }
+
+    private function getDataExample(Field $field): mixed
+    {
+        $examples = [
+            'int' => 108,
+            'float' => 1.08,
+            'string' => 'FooBar',
+            'bool' => true,
+            'array' => [],
+        ];
+
+        return array_key_exists($field->type ?? 'no', $examples) ? $examples[$field->type] : 'Example';
     }
 }
