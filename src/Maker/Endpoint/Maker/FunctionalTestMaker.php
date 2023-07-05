@@ -8,17 +8,24 @@ use Nette\PhpGenerator\Method;
 use Nette\PhpGenerator\PhpNamespace;
 use Symfobooster\Devkit\Maker\AbstractMaker;
 use Symfobooster\Devkit\Maker\Endpoint\ClassMaker;
-use Symfobooster\Devkit\Maker\Endpoint\Manifest\Field;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\DataExampleTrait;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\NotAvailableMethodsMakerTrait;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\RequiredMakerTrait;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\SuccessMakerTrait;
 use Symfobooster\Devkit\Tester\ClientTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class FunctionalTestMaker extends AbstractMaker
 {
+    use RequiredMakerTrait, DataExampleTrait, NotAvailableMethodsMakerTrait, SuccessMakerTrait;
+
     private Dumper $dumper;
+    private string $url;
 
     public function make(): void
     {
         $this->dumper = new Dumper();
+        $this->url = '/' . strtolower($this->manifest->controller) . '/' . strtolower($this->manifest->action);
         $generator = new ClassMaker(
             'Tests\\Functional\\' . ucfirst($this->manifest->controller) . '\\' . ucfirst(
                 $this->manifest->action
@@ -32,39 +39,12 @@ class FunctionalTestMaker extends AbstractMaker
         $namespace->addUse(ClientTrait::class);
         $class->addTrait(ClientTrait::class);
 
+        $this->addSuccessTest($namespace, $class);
         $this->addRequiredTest($namespace, $class);
+        $this->addNotAvailableMethodsTest($namespace, $class);
         $this->addGetRequestMethod($namespace, $class);
 
         $this->fileStorage->addFile('/' . lcfirst($generator->getPath()), $generator->getContent());
-    }
-
-    private function addRequiredTest(PhpNamespace $namespace, ClassType $class): void
-    {
-        if (empty($this->manifest->input) || empty($this->manifest->input->fields)) {
-            return;
-        }
-        $fields = [];
-        foreach ($this->manifest->input->fields as $field) {
-            if (false === $field->required) {
-                continue;
-            }
-            $fields[] = $field->name;
-        }
-        if (empty($fields)) {
-            return;
-        }
-        $test = $class->addMethod('testRequired')
-            ->setReturnType('void')
-            ->setComment('@dataProvider getRequiredFields');
-        $test->addParameter('field')->setType('string');
-        $this->printEndpointCall($test, function () use ($test) {
-            $test->addBody('unset($request[$field]);');
-        }, false);
-        $test->addBody('$this->checkNotValid([$field]);');
-
-        $provider = $class->addMethod('getRequiredFields');
-        $provider->setReturnType('array');
-        $provider->setBody('return ' . $this->dumper->dump($fields) . ';');
     }
 
     private function printEndpointCall(
@@ -81,9 +61,8 @@ class FunctionalTestMaker extends AbstractMaker
         }
         $response = $responseIsVariable ? '$response = ' : '';
         $methodName = 'send' . ucfirst(strtolower($this->manifest->method));
-        $url = '/' . strtolower($this->manifest->controller) . '/' . strtolower($this->manifest->action);
 
-        $method->addBody($response . '$this->' . $methodName . '(\'' . $url . '\', ' . $request . ');');
+        $method->addBody($response . '$this->' . $methodName . '(?, ' . $request . ');', [$this->url]);
     }
 
     private function addGetRequestMethod(PhpNamespace $namespace, ClassType $class): void
@@ -100,18 +79,5 @@ class FunctionalTestMaker extends AbstractMaker
         }
 
         $method->setBody('return ' . $this->dumper->dump($result) . ';');
-    }
-
-    private function getDataExample(Field $field): mixed
-    {
-        $examples = [
-            'int' => 108,
-            'float' => 1.08,
-            'string' => 'FooBar',
-            'bool' => true,
-            'array' => [],
-        ];
-
-        return array_key_exists($field->type ?? 'no', $examples) ? $examples[$field->type] : 'Example';
     }
 }
