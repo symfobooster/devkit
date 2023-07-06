@@ -18,6 +18,7 @@ class ManifestLoader
 {
     private string $projectDir;
     private ValidatorInterface $validator;
+    private Manifest $manifest;
 
     public function __construct(string $projectDir, ValidatorInterface $validator)
     {
@@ -48,7 +49,9 @@ class ManifestLoader
         $arrayNormalizer = new ArrayDenormalizer();
         $serializer = new Serializer([$arrayNormalizer, $normalizer]);
 
-        return $serializer->denormalize($data, Manifest::class);
+        $this->manifest = $serializer->denormalize($data, Manifest::class);
+
+        return $this->manifest;
     }
 
     private function validate(array $data): void
@@ -92,5 +95,10 @@ class ManifestLoader
         $data[$block]['fields'] = $fields;
 
         return $data;
+    }
+
+    public function getManifest(): Manifest
+    {
+        return $this->manifest;
     }
 }

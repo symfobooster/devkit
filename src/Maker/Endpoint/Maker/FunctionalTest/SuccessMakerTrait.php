@@ -4,6 +4,7 @@ namespace Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest;
 
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\PhpNamespace;
+use PhpParser\Builder\Method;
 use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTestMaker;
 
 /**
@@ -16,7 +17,15 @@ trait SuccessMakerTrait
         $method = $class->addMethod('testSuccess')
             ->setReturnType('void');
 
-        $this->printEndpointCall($method, null, true);
+        $this->printEndpointCall($method);
         $method->addBody('$this->checkSuccess();');
+        $method->addBody('');
+
+
+    }
+
+    private function addCheckStructure(Method $method): void
+    {
+
     }
 }

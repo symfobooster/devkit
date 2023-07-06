@@ -3,22 +3,26 @@
 namespace Symfobooster\Devkit\Maker;
 
 use Symfobooster\Devkit\Maker\Endpoint\Manifest\Manifest;
+use Symfobooster\Devkit\Maker\Endpoint\ManifestLoader;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * @property Manifest $manifest
+ */
 abstract class AbstractMaker implements MakerInterface
 {
-    protected Manifest $manifest;
     protected Storage $storage;
     protected FileStorage $fileStorage;
+    private ManifestLoader $manifestLoader;
 
     public function __construct(
-        Manifest $manifest,
+        ManifestLoader $manifestLoader,
         Storage $storage,
         FileStorage $fileStorage
     ) {
-        $this->manifest = $manifest;
         $this->storage = $storage;
         $this->fileStorage = $fileStorage;
+        $this->manifestLoader = $manifestLoader;
     }
 
     protected function readConfigFile(string $path): ?array
@@ -49,5 +53,18 @@ abstract class AbstractMaker implements MakerInterface
         $className = end($pieces);
 
         return str_replace('Interface', '', $className);
+    }
+
+    public function __get(string $name)
+    {
+        if ($name === 'manifest') {
+            if (empty($this->manifest)) {
+                $this->manifest = $this->manifestLoader->getManifest();
+            }
+
+            return $this->manifest;
+        }
+
+        return null;
     }
 }

@@ -7,11 +7,64 @@ services:
     class: Symfobooster\Devkit\Command\MakeEndpointCommand
     arguments:
       $projectDir: '%kernel.project_dir%'
-      $manifestLoader: '@make.endpoint.manifest_loader'
+      $manifestLoader: '@manifest.loader'
+      $makers:
+        - '@maker.input'
+        - '@maker.output'
+        - '@maker.service'
+        - '@maker.router'
+        - '@maker.functional_test'
+        - '@maker.config'
+      $fileStorage: '@manifest.file_storage'
     tags:
       - { name: 'console.command' }
 
-  make.endpoint.manifest_loader:
+  maker.input:
+    class: Symfobooster\Devkit\Maker\Endpoint\Maker\InputMaker
+    arguments:
+      $manifestLoader: '@manifest.loader'
+      $storage: '@manifest.storage'
+      $fileStorage: '@manifest.file_storage'
+  maker.output:
+    class: Symfobooster\Devkit\Maker\Endpoint\Maker\OutputMaker
+    arguments:
+      $manifestLoader: '@manifest.loader'
+      $storage: '@manifest.storage'
+      $fileStorage: '@manifest.file_storage'
+  maker.service:
+    class: Symfobooster\Devkit\Maker\Endpoint\Maker\ServiceMaker
+    arguments:
+      $manifestLoader: '@manifest.loader'
+      $storage: '@manifest.storage'
+      $fileStorage: '@manifest.file_storage'
+  maker.router:
+    class: Symfobooster\Devkit\Maker\Endpoint\Maker\RouterMaker
+    arguments:
+      $manifestLoader: '@manifest.loader'
+      $storage: '@manifest.storage'
+      $fileStorage: '@manifest.file_storage'
+  maker.functional_test:
+    class: Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTestMaker
+    arguments:
+      $manifestLoader: '@manifest.loader'
+      $storage: '@manifest.storage'
+      $fileStorage: '@manifest.file_storage'
+  maker.config:
+    class: Symfobooster\Devkit\Maker\Endpoint\Maker\ConfigMaker
+    arguments:
+      $manifestLoader: '@manifest.loader'
+      $storage: '@manifest.storage'
+      $fileStorage: '@manifest.file_storage'
+
+  manifest.storage:
+    class: Symfobooster\Devkit\Maker\Storage
+    arguments:
+      $projectDir: '%kernel.project_dir%'
+
+  manifest.file_storage:
+    class: Symfobooster\Devkit\Maker\FileStorage
+
+  manifest.loader:
     class: Symfobooster\Devkit\Maker\Endpoint\ManifestLoader
     arguments:
       $projectDir: '%kernel.project_dir%/src'

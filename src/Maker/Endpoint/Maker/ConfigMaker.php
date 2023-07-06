@@ -6,7 +6,7 @@ use Symfobooster\Devkit\Maker\AbstractMaker;
 
 use function Symfony\Component\String\u;
 
-class EndpointConfigMaker extends AbstractMaker
+class ConfigMaker extends AbstractMaker
 {
     private string $controllerSnake;
     private string $actionSnake;

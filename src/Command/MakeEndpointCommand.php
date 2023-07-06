@@ -3,7 +3,7 @@
 namespace Symfobooster\Devkit\Command;
 
 use Symfobooster\Base\Input\Exception\InvalidInputException;
-use Symfobooster\Devkit\Maker\Endpoint\Maker\EndpointConfigMaker;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\ConfigMaker;
 use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTestMaker;
 use Symfobooster\Devkit\Maker\Endpoint\Maker\InputMaker;
 use Symfobooster\Devkit\Maker\Endpoint\Maker\OutputMaker;
@@ -12,6 +12,7 @@ use Symfobooster\Devkit\Maker\Endpoint\Maker\ServiceMaker;
 use Symfobooster\Devkit\Maker\Endpoint\ManifestLoader;
 use Symfobooster\Devkit\Maker\FileStorage;
 use Symfobooster\Devkit\Maker\FileWriter;
+use Symfobooster\Devkit\Maker\MakerInterface;
 use Symfobooster\Devkit\Maker\Storage;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -29,11 +30,16 @@ class MakeEndpointCommand extends Command
 {
     private string $projectDir;
     private ManifestLoader $manifestLoader;
+    /** @var MakerInterface[]  */
+    private array $makers;
+    private FileStorage $fileStorage;
 
-    public function __construct(string $projectDir, ManifestLoader $manifestLoader)
+    public function __construct(string $projectDir, ManifestLoader $manifestLoader, array $makers, FileStorage $fileStorage)
     {
         $this->projectDir = $projectDir;
         $this->manifestLoader = $manifestLoader;
+        $this->makers = $makers;
+        $this->fileStorage = $fileStorage;
         parent::__construct();
     }
 
@@ -55,35 +61,17 @@ class MakeEndpointCommand extends Command
             return Command::FAILURE;
         }
 
-        $storage = new Storage();
-        $storage->set('projectDir', $this->projectDir);
-        $fileStorage = new FileStorage();
-
-        foreach ($this->getMakers() as $maker) {
-            $maker = new $maker($manifest, $storage, $fileStorage);
+        foreach ($this->makers as $maker) {
             try {
                 $maker->make();
             } catch (RuntimeCommandException $exception) {
                 echo $exception->getMessage();
             }
         }
-        $fileWriter = new FileWriter($fileStorage, $this->projectDir);
+        $fileWriter = new FileWriter($this->fileStorage, $this->projectDir);
         $fileWriter->writeFiles();
 
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
-
+        $io->success('Your files have been successfully created');
         return Command::SUCCESS;
-    }
-
-    private function getMakers(): array
-    {
-        return [
-            InputMaker::class,
-            OutputMaker::class,
-            ServiceMaker::class,
-            EndpointConfigMaker::class,
-            RouterMaker::class,
-            FunctionalTestMaker::class,
-        ];
     }
 }
