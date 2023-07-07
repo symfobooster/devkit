@@ -82,4 +82,9 @@ class Manifest implements InputInterface
     {
         return ['GET', 'POST', 'PUT', 'DELETE'];
     }
+
+    public function getUrl(): string
+    {
+        return '/' . $this->controller . '/' . $this->action;
+    }
 }

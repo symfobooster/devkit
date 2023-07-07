@@ -4,20 +4,33 @@ namespace Symfobooster\Devkit\Maker\Endpoint\Maker;
 
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Dumper;
-use Nette\PhpGenerator\Method;
 use Nette\PhpGenerator\PhpNamespace;
 use Symfobooster\Devkit\Maker\AbstractMaker;
 use Symfobooster\Devkit\Maker\Endpoint\ClassMaker;
 use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\DataExampleTrait;
-use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\NotAvailableMethodsMakerTrait;
-use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\RequiredMakerTrait;
-use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\SuccessMakerTrait;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\FunctionMakerInterface;
+use Symfobooster\Devkit\Maker\Endpoint\ManifestLoader;
+use Symfobooster\Devkit\Maker\FileStorage;
+use Symfobooster\Devkit\Maker\Storage;
 use Symfobooster\Devkit\Tester\ClientTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class FunctionalTestMaker extends AbstractMaker
 {
-    use RequiredMakerTrait, DataExampleTrait, NotAvailableMethodsMakerTrait, SuccessMakerTrait;
+    use DataExampleTrait;
+
+    /** @var FunctionMakerInterface[] */
+    private array $functionMakers;
+
+    public function __construct(
+        ManifestLoader $manifestLoader,
+        Storage $storage,
+        FileStorage $fileStorage,
+        array $functionMakers
+    ) {
+        parent::__construct($manifestLoader, $storage, $fileStorage);
+        $this->functionMakers = $functionMakers;
+    }
 
     private Dumper $dumper;
     private string $url;
@@ -39,30 +52,15 @@ class FunctionalTestMaker extends AbstractMaker
         $namespace->addUse(ClientTrait::class);
         $class->addTrait(ClientTrait::class);
 
-        $this->addSuccessTest($namespace, $class);
-        $this->addRequiredTest($namespace, $class);
-        $this->addNotAvailableMethodsTest($namespace, $class);
+        foreach ($this->functionMakers as $maker) {
+            $maker = new $maker();
+            if ($maker->isNeedToRun($this->manifest)) {
+                $maker->run($this->manifest, $namespace, $class);
+            }
+        }
         $this->addGetRequestMethod($namespace, $class);
 
         $this->fileStorage->addFile('/' . lcfirst($generator->getPath()), $generator->getContent());
-    }
-
-    private function printEndpointCall(
-        Method $method,
-        ?\Closure $requestIsVariable = null,
-        bool $responseIsVariable = true
-    ): void {
-        $request = '$this->getRequest()';
-        if (null !== $requestIsVariable) {
-            $request = '$request';
-            $method->addBody('$request = $this->getRequest();');
-            $requestIsVariable();
-            $method->addBody('');
-        }
-        $response = $responseIsVariable ? '$response = ' : '';
-        $methodName = 'send' . ucfirst(strtolower($this->manifest->method));
-
-        $method->addBody($response . '$this->' . $methodName . '(?, ' . $request . ');', [$this->url]);
     }
 
     private function addGetRequestMethod(PhpNamespace $namespace, ClassType $class): void

@@ -49,6 +49,10 @@ services:
       $manifestLoader: '@manifest.loader'
       $storage: '@manifest.storage'
       $fileStorage: '@manifest.file_storage'
+      $functionMakers:
+        - 'Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\Success'
+        - 'Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\Required'
+        - 'Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\NotAvailableMethods'
   maker.config:
     class: Symfobooster\Devkit\Maker\Endpoint\Maker\ConfigMaker
     arguments:

@@ -13,7 +13,7 @@ abstract class AbstractMaker implements MakerInterface
 {
     protected Storage $storage;
     protected FileStorage $fileStorage;
-    private ManifestLoader $manifestLoader;
+    protected ManifestLoader $manifestLoader;
 
     public function __construct(
         ManifestLoader $manifestLoader,

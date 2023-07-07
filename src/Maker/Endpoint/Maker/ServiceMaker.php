@@ -130,7 +130,7 @@ EOT;
         $behave->addBody('return new Success();');
     }
 
-    private function makeDefaultService(ClassMaker $generator):void
+    private function makeDefaultService(ClassMaker $generator): void
     {
         $this->addBehave($generator);
     }

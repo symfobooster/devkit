@@ -53,7 +53,7 @@ class MakeEndpointCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         try {
-            $manifest = $this->manifestLoader->loadFromFile($input->getOption('file') ?? 'manifest.yml');
+            $this->manifestLoader->loadFromFile($input->getOption('file') ?? 'manifest.yml');
         } catch (InvalidInputException $exception) {
             $io->error('You have not valid fields in your manifest file');
             $io->note($exception);
