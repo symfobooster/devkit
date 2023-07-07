@@ -6,13 +6,13 @@ use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\PhpNamespace;
 use Symfobooster\Devkit\Maker\Endpoint\Manifest\Manifest;
 
-class Success implements FunctionMakerInterface
+class SuccessDefault implements FunctionMakerInterface
 {
     use FunctionMakerTrait;
 
     public function isNeedToRun(Manifest $manifest): bool
     {
-        return true;
+        return $manifest->type === 'default';
     }
 
     public function run(Manifest $manifest, PhpNamespace $namespace, ClassType $class): void
@@ -20,8 +20,7 @@ class Success implements FunctionMakerInterface
         $method = $class->addMethod('testSuccess')
             ->setReturnType('void');
 
-        $this->printEndpointCall($manifest, $method);
+        $this->printEndpointCall($manifest, $method, null, false);
         $method->addBody('$this->checkSuccess();');
-        $method->addBody('');
     }
 }
