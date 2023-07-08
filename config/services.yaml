@@ -51,8 +51,10 @@ services:
       $fileStorage: '@manifest.file_storage'
       $functionMakers:
         - 'Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\SuccessDefault'
-        - 'Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\Required'
         - 'Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\NotAvailableMethods'
+        - 'Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\Required'
+        - 'Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\List\Success'
+        - 'Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\List\Pagination'
   maker.config:
     class: Symfobooster\Devkit\Maker\Endpoint\Maker\ConfigMaker
     arguments:

@@ -11,10 +11,15 @@ use Symfony\Component\BrowserKit\Cookie;
  */
 trait ClientTrait
 {
-    private KernelBrowser $client;
-    private ?array $response;
+    use StatusTrait;
+    use StructureTrait;
+
+    private KernelBrowser $browser;
+    private $response;
+    private ?array $content;
     private array $cookies = [];
     private array $headers = [];
+
 
     protected function withCookie(string $key, string $value): self
     {
@@ -30,79 +35,59 @@ trait ClientTrait
         return $this;
     }
 
+    private function sendRequest(string $method, string $url, array $data): ?array
+    {
+        $browser = $this->createBrowser();
+
+        foreach ($this->cookies as $key => $value) {
+            $browser->getCookieJar()->set(new Cookie($key, $value, (string)strtotime('+1 day')));
+        }
+        // TODO authontification
+
+        $headers = array_merge([
+            'CONTENT_TYPE' => 'application/json',
+        ], $this->headers);
+//        $browser->setServerParameters('HTTP_USER_AGENT', 'Symfobooster test process');
+        $browser->request($method, $url, [], [], $headers, json_encode($data));
+
+        $response = $browser->getResponse();
+        $this->content = json_decode($response->getContent(), true);
+        $this->cookies = [];
+        $this->headers = [];
+
+        return $this->content;
+    }
+
     protected function sendGet(string $url, array $data = []): ?array
     {
         $query = $data ? '?' . http_build_query($data) : '';
 
-        return $this->send('GET', $url . $query, []);
-    }
-
-    private function send(string $method, string $url, array $data): ?array
-    {
-        $client = $this->getWebClient();
-        foreach ($this->cookies as $key => $value) {
-            $client->getCookieJar()->set(new Cookie($key, $value, (string)strtotime('+1 day')));
-        }
-        $client->request(
-            $method,
-            $url,
-            [],
-            [],
-            array_merge(['CONTENT_TYPE' => 'application/json'], $this->headers),
-            json_encode($data)
-        );
-        $response = $this->client->getResponse();
-        $this->response = json_decode($response->getContent(), true);
-        $this->cookies = [];
-        $this->headers = [];
-
-        return $this->response;
-    }
-
-    protected function getWebClient(): KernelBrowser
-    {
-        if (!isset($this->client)) {
-            $this->client = static::createClient();
-        }
-
-        return $this->client;
+        return $this->sendRequest('GET', $url . $query, []);
     }
 
     protected function sendPut(string $url, array $data): ?array
     {
-        return $this->send('PUT', $url, $data);
+        return $this->sendRequest('PUT', $url, $data);
     }
 
     protected function sendPost(string $url, array $data): ?array
     {
-        return $this->send('POST', $url, $data);
+        return $this->sendRequest('POST', $url, $data);
     }
 
-    protected function checkSuccess(): void
+    protected function sendDelete(string $url, array $data): ?array
     {
-        $statusCode = $this->client->getResponse()->getStatusCode();
-        if (200 !== $statusCode) {
-            print_r($this->response);
+        $query = $data ? '?' . http_build_query($data) : '';
+
+        return $this->sendRequest('DELETE', $url . $query, []);
+    }
+
+    private function createBrowser(): KernelBrowser
+    {
+        if (!isset($this->browser)) {
+            $this->browser = static::createClient();
         }
-        $this->assertEquals(200, $statusCode);
-    }
 
-    protected function checkLogic(string $message): void
-    {
-        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals($message, $this->response['error']);
-    }
-
-    protected function checkNotValid(array $fields): void
-    {
-        $this->assertEquals(400, $this->client->getResponse()->getStatusCode());
-        foreach ($fields as $field) {
-            $this->assertArrayHasKey($field, $this->response['fields']);
-        }
-    }
-
-    protected function checkNotFound(): void
-    {
-        $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
+        return $this->browser;
     }
 }

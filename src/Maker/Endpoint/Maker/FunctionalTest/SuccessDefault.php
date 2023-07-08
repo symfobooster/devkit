@@ -3,6 +3,7 @@
 namespace Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest;
 
 use Nette\PhpGenerator\ClassType;
+use Nette\PhpGenerator\Method;
 use Nette\PhpGenerator\PhpNamespace;
 use Symfobooster\Devkit\Maker\Endpoint\Manifest\Manifest;
 
@@ -12,7 +13,7 @@ class SuccessDefault implements FunctionMakerInterface
 
     public function isNeedToRun(Manifest $manifest): bool
     {
-        return $manifest->type === 'default';
+        return $manifest->type === Manifest::TYPE_SIMPLE;
     }
 
     public function run(Manifest $manifest, PhpNamespace $namespace, ClassType $class): void
