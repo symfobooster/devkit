@@ -26,22 +26,12 @@ class Success implements FunctionMakerInterface
         $this->printEndpointCall($manifest, $method);
         $method->addBody('$this->checkSuccess();');
 
-        $this->addCheckListStructure($method);
-        $this->addCheckItemStructure($manifest, $method);
+        $this->addCheckStructure($manifest, $method);
+
+        $method->addBody('$this->assertEquals(?, array_column($response[\'items\'], \'name\'));', [['name1', 'name2']]);
     }
 
-    private function addCheckListStructure(Method $method): void
-    {
-        $method->addBody('');
-        $method->addBody('$this->checkStructure(?, $response);', [
-            [
-                'items' => 'array',
-                'total' => 'integer',
-            ]
-        ]);
-    }
-
-    private function addCheckItemStructure(Manifest $manifest, Method $method): void
+    private function addCheckStructure(Manifest $manifest, Method $method): void
     {
         $fields = [];
         if (!empty($manifest->output) && !empty($manifest->output->fields)) {
@@ -50,6 +40,6 @@ class Success implements FunctionMakerInterface
             }
         }
         $method->addBody('');
-        $method->addBody('$this->checkStructure(?, $response[\'items\']);', [$fields]);
+        $method->addBody('$this->checkListStructure(2, 2, ?);', [$fields]);
     }
 }

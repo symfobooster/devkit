@@ -50,6 +50,7 @@ class ServiceMaker extends AbstractMaker
 
     private function makeListService(ClassMaker $generator): void
     {
+        $this->addBehave($generator);
     }
 
     private function makeViewService(ClassMaker $generator): void
