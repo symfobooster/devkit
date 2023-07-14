@@ -5,6 +5,7 @@ namespace Symfobooster\Devkit\Maker\Endpoint;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\PhpFile;
 use Nette\PhpGenerator\PhpNamespace;
+use Nette\PhpGenerator\Printer;
 
 class ClassMaker
 {
@@ -56,7 +57,10 @@ class ClassMaker
 
     public function getContent(): string
     {
-        return (string)$this->file;
+        $printer = new Printer();
+        $printer->linesBetweenMethods = 1;
+
+        return $printer->printFile($this->file);
     }
 
     public function getPath(): string
