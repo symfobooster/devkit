@@ -1,19 +1,20 @@
 <?php
 
-namespace Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest;
+namespace Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\Default;
 
 use Nette\PhpGenerator\ClassType;
-use Nette\PhpGenerator\Method;
 use Nette\PhpGenerator\PhpNamespace;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\FunctionMakerInterface;
+use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\FunctionMakerTrait;
 use Symfobooster\Devkit\Maker\Endpoint\Manifest\Manifest;
 
-class SuccessDefault implements FunctionMakerInterface
+class Success implements FunctionMakerInterface
 {
     use FunctionMakerTrait;
 
     public function isNeedToRun(Manifest $manifest): bool
     {
-        return $manifest->type === Manifest::TYPE_SIMPLE;
+        return $manifest->type === Manifest::TYPE_DEFAULT;
     }
 
     public function run(Manifest $manifest, PhpNamespace $namespace, ClassType $class): void

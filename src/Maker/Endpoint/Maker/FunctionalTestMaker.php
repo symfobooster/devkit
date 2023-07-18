@@ -13,6 +13,7 @@ use Symfobooster\Devkit\Maker\Endpoint\ManifestLoader;
 use Symfobooster\Devkit\Maker\FileStorage;
 use Symfobooster\Devkit\Maker\Storage;
 use Symfobooster\Devkit\Tester\ClientTrait;
+use Symfobooster\Devkit\Tester\DataBaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class FunctionalTestMaker extends AbstractMaker
@@ -51,6 +52,8 @@ class FunctionalTestMaker extends AbstractMaker
 
         $namespace->addUse(ClientTrait::class);
         $class->addTrait(ClientTrait::class);
+        $namespace->addUse(DataBaseTrait::class);
+        $class->addTrait(DataBaseTrait::class);
 
         foreach ($this->functionMakers as $maker) {
             $maker = new $maker();
@@ -59,6 +62,8 @@ class FunctionalTestMaker extends AbstractMaker
             }
         }
         $this->addGetRequestMethod($namespace, $class);
+        $this->addSetUp($class);
+        $this->addTearDown($class);
 
         $this->fileStorage->addFile('/' . lcfirst($generator->getPath()), $generator->getContent());
     }
@@ -77,5 +82,20 @@ class FunctionalTestMaker extends AbstractMaker
         }
 
         $method->setBody('return ' . $this->dumper->dump($result) . ';');
+    }
+
+    private function addSetUp(ClassType $class): void
+    {
+        $method = $class->addMethod('setUp')
+            ->setReturnType('void');
+        $method->addBody('$this->loadFixtures([]);');
+    }
+
+    private function addTearDown(ClassType $class): void
+    {
+        $method = $class->addMethod('tearDown')
+            ->setReturnType('void');
+        $method->addBody('$this->purgeDatabase();');
+        $method->addBody('parent::tearDown();');
     }
 }

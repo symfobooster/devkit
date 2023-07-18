@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Manifest implements InputInterface
 {
     public const
-        TYPE_SIMPLE = 'default',
+        TYPE_DEFAULT = 'default',
         TYPE_LIST = 'list',
         TYPE_VIEW = 'view',
         TYPE_CREATE = 'create',
@@ -69,7 +69,7 @@ class Manifest implements InputInterface
     public static function getTypes(): array
     {
         return [
-            self::TYPE_SIMPLE,
+            self::TYPE_DEFAULT,
             self::TYPE_LIST,
             self::TYPE_VIEW,
             self::TYPE_CREATE,

@@ -40,7 +40,7 @@ class Filtration implements FunctionMakerInterface
         $method->setBody(str_replace('$this->getRequest()', '$request', $method->getBody()));
     }
 
-    private function addDataProvider(Manifest $manifest, ClassType $class)
+    private function addDataProvider(Manifest $manifest, ClassType $class): void
     {
         $method = $class->addMethod('getFiltrationFields')
             ->setReturnType('array');

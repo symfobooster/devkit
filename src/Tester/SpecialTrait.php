@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  */
 trait SpecialTrait
 {
-    protected function checkNotAllowedMethods(string $except, string $uri, array $data = []): void
+    protected function checkNotAvailableMethods(string $except, string $uri, array $data = []): void
     {
         $methods = ['GET', 'POST', 'PUT', 'DELETE'];
         foreach ($methods as $method) {

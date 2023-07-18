@@ -1,13 +1,11 @@
 <?php
 
-namespace Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\List;
+namespace Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest;
 
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Dumper;
 use Nette\PhpGenerator\Literal;
 use Nette\PhpGenerator\PhpNamespace;
-use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\FunctionMakerInterface;
-use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\FunctionMakerTrait;
 use Symfobooster\Devkit\Maker\Endpoint\Manifest\Field;
 use Symfobooster\Devkit\Maker\Endpoint\Manifest\Manifest;
 
@@ -17,7 +15,7 @@ class NotValid implements FunctionMakerInterface
 
     public function isNeedToRun(Manifest $manifest): bool
     {
-        return $manifest->type === Manifest::TYPE_LIST;
+        return true;
     }
 
     public function run(Manifest $manifest, PhpNamespace $namespace, ClassType $class): void
@@ -40,7 +38,7 @@ class NotValid implements FunctionMakerInterface
         $method->addBody('$this->checkNotValid([$field]);');
     }
 
-    private function addDataProvider(Manifest $manifest, ClassType $class)
+    private function addDataProvider(Manifest $manifest, ClassType $class): void
     {
         $method = $class->addMethod('getNotValidFields')
             ->setReturnType('array');
