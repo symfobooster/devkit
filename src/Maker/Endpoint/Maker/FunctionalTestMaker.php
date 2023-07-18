@@ -86,9 +86,12 @@ class FunctionalTestMaker extends AbstractMaker
 
     private function addSetUp(ClassType $class): void
     {
+        $class->addProperty('repository')->setType('ChangeRepository');
+
         $method = $class->addMethod('setUp')
             ->setReturnType('void');
         $method->addBody('$this->loadFixtures([]);');
+        $method->addBody('$this->repository = $this->getEntityManager()->getRepository(ChangeEntity::class);');
     }
 
     private function addTearDown(ClassType $class): void

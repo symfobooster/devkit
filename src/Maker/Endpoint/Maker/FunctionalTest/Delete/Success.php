@@ -28,7 +28,7 @@ class Success implements FunctionMakerInterface
         $this->printEndpointCall($manifest, $method, function (){}, false);
         $method->addBody('$this->checkNoContent();');
 
-        $method->addBody('$this->dontSeeRecord(Entity::class, [\'id\' => $request[\'id\']);');
+        $method->addBody('$this->dontSeeRecord(ChangeEntity::class, [\'id\' => $request[\'id\']);');
         // TODO set entity from manifest
     }
 }
