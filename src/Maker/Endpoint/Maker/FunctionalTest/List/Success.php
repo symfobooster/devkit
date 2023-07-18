@@ -40,6 +40,6 @@ class Success implements FunctionMakerInterface
             }
         }
         $method->addBody('');
-        $method->addBody('$this->checkListStructure(2, 2, ?);', [$fields]);
+        $method->addBody('$this->checkListResponse(2, 2, ?);', [$fields]);
     }
 }

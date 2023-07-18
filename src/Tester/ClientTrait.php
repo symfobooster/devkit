@@ -13,13 +13,13 @@ trait ClientTrait
 {
     use StatusTrait;
     use StructureTrait;
+    use SpecialTrait;
 
     private KernelBrowser $browser;
-    private $response;
+    private mixed $response;
     private ?array $content;
     private array $cookies = [];
     private array $headers = [];
-
 
     protected function withCookie(string $key, string $value): self
     {
@@ -47,7 +47,7 @@ trait ClientTrait
         $headers = array_merge([
             'CONTENT_TYPE' => 'application/json',
         ], $this->headers);
-//        $browser->setServerParameters('HTTP_USER_AGENT', 'Symfobooster test process');
+        $browser->setServerParameter('HTTP_USER_AGENT', 'Symfobooster test process');
         $browser->request($method, $url, [], [], $headers, json_encode($data));
 
         $response = $browser->getResponse();
@@ -89,5 +89,18 @@ trait ClientTrait
         }
 
         return $this->browser;
+    }
+
+    protected function setValueByKeyString(array &$array, string $keyString, mixed $value): void
+    {
+        $link = &$array;
+        $fields = explode('.', $keyString);
+        foreach ($fields as $index => $key) {
+            if ((count($fields) - 1) === $index) {
+                $link[$key] = $value;
+            } else {
+                $link = &$link[$key];
+            }
+        }
     }
 }

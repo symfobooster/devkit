@@ -36,6 +36,11 @@ trait StatusTrait
         $this->checkStatus(404);
     }
 
+    protected function checkNoContent(): void
+    {
+        $this->checkStatus(204);
+    }
+
     private function checkStatus(int $status): void
     {
         $statusCode = $this->browser->getResponse()->getStatusCode();
@@ -43,5 +48,25 @@ trait StatusTrait
             print_r($this->response);
         }
         $this->assertEquals($status, $this->browser->getResponse()->getStatusCode());
+    }
+
+    protected function checkMethodNotAllowed(): void
+    {
+        $this->checkStatus(405);
+    }
+
+    protected function checkUnauthorized(): void
+    {
+        $this->checkStatus(401);
+    }
+
+    protected function checkConflict(): void
+    {
+        $this->checkStatus(409);
+    }
+
+    protected function checkAccessDenied(): void
+    {
+        $this->checkStatus(403);
     }
 }
