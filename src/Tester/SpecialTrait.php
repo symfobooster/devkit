@@ -57,9 +57,9 @@ trait SpecialTrait
         $this->checkStructure([
             'items' => 'array',
             'total' => 'integer',
-        ], $this->response);
-        $this->assertEquals($total, $this->response['total']);
-        $this->assertCount($count, $this->response['items']);
-        $this->checkStructureInList($structure, $this->response['items']);
+        ], $this->content);
+        $this->assertEquals($total, $this->content['total']);
+        $this->assertCount($count, $this->content['items']);
+        $this->checkStructureInList($structure, $this->content['items']);
     }
 }

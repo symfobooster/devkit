@@ -10,17 +10,17 @@ trait FunctionMakerTrait
     private function printEndpointCall(
         Manifest $manifest,
         Method $method,
-        ?\Closure $requestIsVariable = null,
-        bool $responseIsVariable = true
+        ?\Closure $requestAsVariable = null,
+        bool $contentAsVariable = true
     ): void {
         $request = '$this->getRequest()';
-        if (null !== $requestIsVariable) {
+        if (null !== $requestAsVariable) {
             $request = '$request';
             $method->addBody('$request = $this->getRequest();');
-            $requestIsVariable();
+            $requestAsVariable();
             $method->addBody('');
         }
-        $response = $responseIsVariable ? '$response = ' : '';
+        $response = $contentAsVariable ? '$content = ' : '';
         $methodName = 'send' . ucfirst(strtolower($manifest->method));
 
         $method->addBody($response . '$this->' . $methodName . '(?, ' . $request . ');', [$manifest->getUrl()]);
