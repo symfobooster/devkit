@@ -22,7 +22,7 @@ class ServiceMaker extends AbstractMaker
         $namespace = $generator->getNamespace();
         $namespace->addUse(ServiceInterface::class);
         $namespace->addUse(InputInterface::class);
-        $namespace->addUse($namespace->getName() . '\\' . $this->storage->get('outputClass'));
+        $namespace->addUse($this->storage->get('outputClass'));
 
         $generator->getClass()->addImplement(ServiceInterface::class);
 

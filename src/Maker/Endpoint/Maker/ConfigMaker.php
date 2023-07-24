@@ -37,6 +37,7 @@ class ConfigMaker extends AbstractMaker
                 ],
                 $prefix . '.service' => [
                     'class' => $this->storage->get('serviceClass'),
+                    'arguments' => '',
                 ],
                 $prefix . '.input' => [
                     'parent' => 'symfobooster.input.loader',

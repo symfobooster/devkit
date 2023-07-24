@@ -19,10 +19,11 @@
     "symfony/http-foundation": "6.3.*",
     "nette/php-generator": "^4.0",
     "phpunit/phpunit": "10.2.*",
-    "symfony/browser-kit": "6.3.*"
+    "symfony/browser-kit": "6.3.*",
+    "squizlabs/php_codesniffer": "^3.7",
+    "phpdocumentor/reflection-docblock": "^5.3.0"
   },
   "require-dev": {
-    "squizlabs/php_codesniffer": "^3.7"
   },
   "autoload": {
     "psr-4": {

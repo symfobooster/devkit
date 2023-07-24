@@ -27,7 +27,7 @@ abstract class AbstractMaker implements MakerInterface
 
     protected function readConfigFile(string $path): ?array
     {
-        return $this->readYamlFile($this->storage->get('projectDir') . '/config' . $path);
+        return $this->readYamlFile('/config' . $path);
     }
 
     protected function readYamlFile(string $path): ?array

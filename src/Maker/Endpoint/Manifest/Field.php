@@ -12,7 +12,7 @@ class Field implements InputInterface
     public string $type;
     public string $source;
     public bool $muted = false;
-    public bool $required = true;
+    public bool $required = false;
     public ?string $renamed = null;
 
     public static function getValidators(): Constraint
