@@ -5,7 +5,7 @@ namespace Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Dumper;
 use Nette\PhpGenerator\PhpNamespace;
-use Symfobooster\Devkit\Maker\Endpoint\Manifest\Field;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfobooster\Devkit\Maker\Endpoint\Manifest\Manifest;
 
 class Required implements FunctionMakerInterface
@@ -30,22 +30,25 @@ class Required implements FunctionMakerInterface
     {
         $test = $class->addMethod('testRequired')
             ->setReturnType('void')
-            ->setComment('@dataProvider getRequiredFields');
+            ->addAttribute('DataProvider', ['getRequiredFields']);
+        $namespace->addUse(DataProvider::class);
         $test->addParameter('field')->setType('string');
         $this->printEndpointCall($manifest, $test, function () use ($test) {
             $test->addBody('unset($request[$field]);');
         }, false);
         $test->addBody('$this->checkNotValid([$field]);');
 
-        $fields = array_column(
-            array_filter($manifest->input->fields, function (Field $field) {
-                return true === $field->required;
-            }),
-            'name'
-        );
+        $fields = [];
+        foreach ($manifest->input->fields as $field) {
+            if($field->required === false) {
+                continue;
+            }
+            $fields[] = [$field->name];
+        }
         $dumper = new Dumper();
-        $provider = $class->addMethod('getRequiredFields');
-        $provider->setReturnType('array');
+        $provider = $class->addMethod('getRequiredFields')
+            ->setStatic()
+            ->setReturnType('array');
         $provider->setBody('return ' . $dumper->dump($fields) . ';');
     }
 }

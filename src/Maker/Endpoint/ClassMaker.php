@@ -58,6 +58,7 @@ class ClassMaker
     public function getContent(): string
     {
         $printer = new Printer();
+        $printer->indentation = '    ';
         $printer->linesBetweenMethods = 1;
 
         return $printer->printFile($this->file);

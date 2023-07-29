@@ -90,6 +90,7 @@ class FunctionalTestMaker extends AbstractMaker
 
         $method = $class->addMethod('setUp')
             ->setReturnType('void');
+        $method->addBody('$this->createBrowser();');
         $method->addBody('$this->loadFixtures([]);');
         $method->addBody('$this->repository = $this->getEntityManager()->getRepository(ChangeEntity::class);');
     }

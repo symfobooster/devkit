@@ -6,6 +6,7 @@ use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Dumper;
 use Nette\PhpGenerator\Literal;
 use Nette\PhpGenerator\PhpNamespace;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfobooster\Devkit\Maker\Endpoint\Manifest\Field;
 use Symfobooster\Devkit\Maker\Endpoint\Manifest\Manifest;
 
@@ -22,13 +23,14 @@ class NotValid implements FunctionMakerInterface
     {
         $this->addTestNotValidMethod($manifest, $class);
         $this->addDataProvider($manifest, $class);
+        $namespace->addUse(DataProvider::class);
     }
 
     private function addTestNotValidMethod(Manifest $manifest, ClassType $class): void
     {
         $method = $class->addMethod('testNotValid')
             ->setReturnType('void')
-            ->setComment('@dataProvider getNotValidFields');
+            ->addAttribute('DataProvider', ['getRequiredFields']);
         $method->addParameter('field')->setType('string');
         $method->addParameter('value')->setType('mixed');
 
@@ -41,6 +43,7 @@ class NotValid implements FunctionMakerInterface
     private function addDataProvider(Manifest $manifest, ClassType $class): void
     {
         $method = $class->addMethod('getNotValidFields')
+            ->setStatic()
             ->setReturnType('array');
 
         $values = [];
