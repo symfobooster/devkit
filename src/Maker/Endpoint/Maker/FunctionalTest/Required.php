@@ -40,7 +40,7 @@ class Required implements FunctionMakerInterface
 
         $fields = [];
         foreach ($manifest->input->fields as $field) {
-            if($field->required === false) {
+            if ($field->required === false) {
                 continue;
             }
             $fields[] = [$field->name];

@@ -25,7 +25,8 @@ class Success implements FunctionMakerInterface
         $method = $class->addMethod('testSuccess')
             ->setReturnType('void');
 
-        $this->printEndpointCall($manifest, $method, function (){}, false);
+        $this->printEndpointCall($manifest, $method, function () {
+        }, false);
         $method->addBody('$this->checkNoContent();');
 
         $method->addBody('$this->dontSeeRecord(ChangeEntity::class, [\'id\' => $request[\'id\']);');

@@ -2,12 +2,12 @@
 
 namespace Symfobooster\Devkit\Tester;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * @mixin ClientTrait
@@ -38,7 +38,7 @@ trait DataBaseTrait
                 throw new \RuntimeException("Fixture class $fixtureClassName is not exist");
             }
 
-            $loader->addFixture(new $fixtureClassName);
+            $loader->addFixture(new $fixtureClassName());
         }
 
         $executor = new ORMExecutor($this->getEntityManager(), new ORMPurger());
