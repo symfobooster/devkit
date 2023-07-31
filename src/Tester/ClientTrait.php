@@ -5,6 +5,7 @@ namespace Symfobooster\Devkit\Tester;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @mixin WebTestCase
@@ -20,6 +21,7 @@ trait ClientTrait
     private ?array $content;
     private array $cookies = [];
     private array $headers = [];
+    private array $files = [];
 
     protected function withCookie(string $key, string $value): self
     {
@@ -31,6 +33,13 @@ trait ClientTrait
     protected function withHeader(string $key, string $value): self
     {
         $this->headers[$key] = $value;
+
+        return $this;
+    }
+    
+    protected function withFile(string $key, UploadedFile $value): self
+    {
+        $this->files[$key] = $value;
 
         return $this;
     }
@@ -48,12 +57,13 @@ trait ClientTrait
             'CONTENT_TYPE' => 'application/json',
         ], $this->headers);
         $browser->setServerParameter('HTTP_USER_AGENT', 'Symfobooster test process');
-        $browser->request($method, $url, [], [], $headers, json_encode($data));
+        $browser->request($method, $url, [], $this->files, $headers, json_encode($data));
 
         $response = $browser->getResponse();
         $this->content = json_decode($response->getContent(), true);
         $this->cookies = [];
         $this->headers = [];
+        $this->files = [];
 
         return $this->content;
     }
