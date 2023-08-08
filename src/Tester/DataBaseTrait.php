@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
- * @mixin ClientTrait
+ * @mixin BrowserTrait
  * @mixin WebTestCase
  */
 trait DataBaseTrait

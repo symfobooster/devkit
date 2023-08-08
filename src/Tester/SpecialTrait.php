@@ -5,7 +5,7 @@ namespace Symfobooster\Devkit\Tester;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
- * @mixin ClientTrait
+ * @mixin BrowserTrait
  * @mixin WebTestCase
  */
 trait SpecialTrait

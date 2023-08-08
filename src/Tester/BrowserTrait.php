@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * @mixin WebTestCase
  */
-trait ClientTrait
+trait BrowserTrait
 {
     use StatusTrait;
     use StructureTrait;
@@ -30,16 +30,43 @@ trait ClientTrait
         return $this;
     }
 
+    protected function withoutCookie(string $key): self
+    {
+        if (array_key_exists($key, $this->cookies)) {
+            unset($this->cookies[$key]);
+        }
+
+        return $this;
+    }
+
     protected function withHeader(string $key, string $value): self
     {
         $this->headers[$key] = $value;
 
         return $this;
     }
-    
+
+    protected function withoutHeader(string $key): self
+    {
+        if (array_key_exists($key, $this->headers)) {
+            unset($this->headers[$key]);
+        }
+
+        return $this;
+    }
+
     protected function withFile(string $key, UploadedFile $value): self
     {
         $this->files[$key] = $value;
+
+        return $this;
+    }
+
+    protected function withoutFile(string $key): self
+    {
+        if (array_key_exists($key, $this->files)) {
+            unset($this->files[$key]);
+        }
 
         return $this;
     }

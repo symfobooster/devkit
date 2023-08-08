@@ -12,7 +12,7 @@ use Symfobooster\Devkit\Maker\Endpoint\Maker\FunctionalTest\FunctionMakerInterfa
 use Symfobooster\Devkit\Maker\Endpoint\ManifestLoader;
 use Symfobooster\Devkit\Maker\FileStorage;
 use Symfobooster\Devkit\Maker\Storage;
-use Symfobooster\Devkit\Tester\ClientTrait;
+use Symfobooster\Devkit\Tester\BrowserTrait;
 use Symfobooster\Devkit\Tester\DataBaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -50,8 +50,8 @@ class FunctionalTestMaker extends AbstractMaker
         $namespace = $generator->getNamespace();
         $namespace->addUse(WebTestCase::class);
 
-        $namespace->addUse(ClientTrait::class);
-        $class->addTrait(ClientTrait::class);
+        $namespace->addUse(BrowserTrait::class);
+        $class->addTrait(BrowserTrait::class);
         $namespace->addUse(DataBaseTrait::class);
         $class->addTrait(DataBaseTrait::class);
 
