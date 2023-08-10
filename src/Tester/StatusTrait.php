@@ -69,4 +69,9 @@ trait StatusTrait
     {
         $this->checkStatus(403);
     }
+
+    protected function checkCreated(): void
+    {
+        $this->checkStatus(201);
+    }
 }
